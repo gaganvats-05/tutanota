@@ -4,7 +4,8 @@ import {worker} from "../api/main/WorkerClient"
 import {Dialog} from "../gui/base/Dialog"
 import {
 	AccessBlockedError,
-	AccessDeactivatedError, AccessExpiredError,
+	AccessDeactivatedError,
+	AccessExpiredError,
 	BadRequestError,
 	ConnectionError,
 	LockedError,
@@ -13,7 +14,7 @@ import {
 	TooManyRequestsError
 } from "../api/common/error/RestError"
 import {load, serviceRequestVoid, update} from "../api/main/Entity"
-import {assertMainOrNode, isAdminClient, isApp, isTutanotaDomain, LOGIN_TITLE, Mode} from "../api/Env"
+import {assertMainOrNode, isAdminClient, isApp, LOGIN_TITLE, Mode} from "../api/Env"
 import {CloseEventBusOption, Const} from "../api/common/TutanotaConstants"
 import {CustomerPropertiesTypeRef} from "../api/entities/sys/CustomerProperties"
 import {neverNull, noOp} from "../api/common/utils/Utils"
@@ -42,11 +43,11 @@ import {locator} from "../api/main/MainLocator"
 import {checkApprovalStatus} from "../misc/LoginUtils"
 import {getHourCycle} from "../misc/Formatter"
 import {formatPrice} from "../subscription/PriceUtils"
-import {showEditOutOfOfficeNotificationDialog} from "../settings/EditOutOfOfficeNotificationDialog"
 import * as notificationOverlay from "../gui/base/NotificationOverlay"
 import {ButtonType} from "../gui/base/ButtonN"
 import {isNotificationCurrentlyActive, loadOutOfOfficeNotification} from "../settings/OutOfOfficeNotificationUtils"
-import {showMoreStorageNeededOrderDialog} from "../subscription/SubscriptionUtils"
+import {showMoreStorageNeededOrderDialog} from "../subscription/SubscriptionDialogUtils";
+import type {OutOfOfficeNotification} from "../api/entities/tutanota/OutOfOfficeNotification"
 
 assertMainOrNode()
 
@@ -281,6 +282,11 @@ export class LoginViewController implements ILoginViewController {
 			})
 	}
 
+	_deactivateOutOfOfficeNotification(notification: OutOfOfficeNotification): Promise<void> {
+		notification.enabled = false
+		return locator.entityClient.update(notification)
+	}
+
 	_remindActiveOutOfOfficeNotification(): Promise<void> {
 		return loadOutOfOfficeNotification().then((notification) => {
 			if (notification && isNotificationCurrentlyActive(notification, new Date())) {
@@ -292,7 +298,7 @@ export class LoginViewController implements ILoginViewController {
 				notificationOverlay.show(notificationMessage, {label: "close_alt"}, [
 					{
 						label: "deactivate_action",
-						click: () => showEditOutOfOfficeNotificationDialog(notification),
+						click: () => this._deactivateOutOfOfficeNotification(notification),
 						type: ButtonType.Primary
 					}
 				])

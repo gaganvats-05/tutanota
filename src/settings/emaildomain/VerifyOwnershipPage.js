@@ -64,7 +64,6 @@ export class VerifyOwnershipPageAttrs implements WizardPageAttrs<AddDomainData> 
 					if (customDomainInfos.filter((domainInfo) => domainInfo.domain === this.data.domain()).length) {
 						return null
 					}
-					console.log("")
 					return () => lang.get("customDomainErrorDomainNotAvailable_msg")
 				} else {
 					let errorMessageMap = {}
