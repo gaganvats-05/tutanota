@@ -50,6 +50,13 @@ import {KnowledgeBaseListView} from "./KnowledgeBaseListView"
 
 assertMainOrNode()
 
+export type TemplateGroupExpander = {
+	groupID: Id,
+	groupName: string,
+	expanded: Stream<boolean>,
+	settingsFolder: SettingsFolder[]
+}
+
 export class SettingsView implements CurrentView {
 
 	view: Function;
@@ -59,7 +66,7 @@ export class SettingsView implements CurrentView {
 	_settingsDetailsColumn: ViewColumn;
 	_userFolders: SettingsFolder[];
 	_adminFolders: SettingsFolder[];
-	_templateGroupFolders: Array<{groupName: string, settingsFolder: SettingsFolder[]}>;
+	_templateGroupExpander: Array<TemplateGroupExpander>;
 	_selectedFolder: SettingsFolder;
 	_currentViewer: ?UpdatableSettingsViewer;
 	detailsViewer: ?UpdatableSettingsViewer; // the component for the details column. can be set by settings views
@@ -105,22 +112,8 @@ export class SettingsView implements CurrentView {
 			}
 		}
 
-		this._templateGroupFolders = []
-		locator.templateGroupModel.init().then(templateGroupInstances => {
-				templateGroupInstances.forEach(templateGroupInstance => {
-					// Create Settingsfolder
-					let templateGroupFolder: {groupName: string, settingsFolder: SettingsFolder[]} = {
-						groupName: templateGroupInstance.groupInfo.name,
-						settingsFolder: []
-					}
-					templateGroupFolder.settingsFolder.push(
-						new SettingsFolder("template_label", () => Icons.Folder, "template-" + templateGroupInstance.groupInfo.name, () => new TemplateListView(this, locator.entityClient, templateGroupInstance.groupRoot)))
-					templateGroupFolder.settingsFolder.push(
-						new SettingsFolder("knowledgebase_label", () => Icons.Archive, "knowledgebase-" + templateGroupInstance.groupInfo.name, () => new KnowledgeBaseListView(this, locator.entityClient, templateGroupInstance.groupRoot)))
-					this._templateGroupFolders.push(templateGroupFolder)})
-
-			}
-		)
+		this._templateGroupExpander = []
+		this._createTemplateGroupExpander()
 
 		this._selectedFolder = this._userFolders[0]
 
@@ -143,12 +136,11 @@ export class SettingsView implements CurrentView {
 							}, this._createFolderExpanderChildren(this._adminFolders)),
 						]
 						: null,
-					this._templateGroupFolders.map(templateGroupFolder => {
-						let templateFolderExpanded = stream(true)
+					this._templateGroupExpander.map(templateGroupExpander => {
 						return m(FolderExpander, {
-							label: () => templateGroupFolder.groupName,
-							expanded: templateFolderExpanded,
-						}, this._createFolderExpanderChildren(templateGroupFolder.settingsFolder))
+							label: () => templateGroupExpander.groupName,
+							expanded: templateGroupExpander.expanded,
+						}, this._createFolderExpanderChildren(templateGroupExpander.settingsFolder))
 					}),
 					isTutanotaDomain() ? this._aboutThisSoftwareLink() : null,
 				]),
@@ -219,6 +211,32 @@ export class SettingsView implements CurrentView {
 		return this._currentViewer
 	}
 
+	_createTemplateGroupExpander() {
+		locator.templateGroupModel.init().then(templateGroupInstances => {
+				this._templateGroupExpander = []
+				templateGroupInstances.forEach(templateGroupInstance => {
+					// Create Settingsfolder
+					const expanded = stream(true)
+					let templateGroupExpander: TemplateGroupExpander = {
+						groupID: templateGroupInstance.groupRoot._id,
+						groupName: templateGroupInstance.groupInfo.name,
+						expanded,
+						settingsFolder: []
+					}
+					templateGroupExpander.settingsFolder.push(
+						new SettingsFolder("template_label", () => Icons.Folder, "template-"
+							+ templateGroupInstance.groupInfo.name, () => new TemplateListView(this, locator.entityClient, templateGroupInstance.groupRoot)))
+					templateGroupExpander.settingsFolder.push(
+						new SettingsFolder("knowledgebase_label", () => Icons.Archive, "knowledgebase-"
+							+ templateGroupInstance.groupInfo.name, () => new KnowledgeBaseListView(this, locator.entityClient, templateGroupInstance.groupRoot)))
+					this._templateGroupExpander.push(templateGroupExpander)
+
+				})
+				m.redraw()
+			}
+		)
+	}
+
 	/**
 	 * Notifies the current view about changes of the url within its scope.
 	 */
@@ -230,6 +248,12 @@ export class SettingsView implements CurrentView {
 			let folder = this._userFolders.find(f => f.path === args.folder)
 			if (!folder && logins.getUserController().isGlobalOrLocalAdmin()) {
 				folder = this._adminFolders.find(f => f.path === args.folder)
+			}
+			if (!folder && logins.getUserController().getTemplateMemberships().length > 0) {
+				this._templateGroupExpander.find(templateGroupExpander => {
+					folder = templateGroupExpander.settingsFolder.find(f => f.path === args.folder)
+					return folder
+				})
 			}
 			if (!folder) {
 				this._setUrl(this._userFolders[0].url)
@@ -266,6 +290,13 @@ export class SettingsView implements CurrentView {
 					// the user admin status might have changed
 					if (!this._isGlobalOrLocalAdmin(user) && this._currentViewer
 						&& this._adminFolders.find(f => f.isActive())) {
+						this._setUrl(this._userFolders[0].url)
+					}
+					// Check if template group memberships have changed
+					const existingTemplateGroupMemberships = this._templateGroupExpander.map(templateGroupExpander => templateGroupExpander.groupID)
+					const newTemplateGroupMemberships = logins.getUserController().getTemplateMemberships().map(membership => membership.group)
+					if (existingTemplateGroupMemberships.length !== newTemplateGroupMemberships.length) {
+						this._createTemplateGroupExpander()
 						this._setUrl(this._userFolders[0].url)
 					}
 					m.redraw()

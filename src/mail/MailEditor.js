@@ -62,6 +62,7 @@ import {TEMPLATE_POPUP_HEIGHT, TemplatePopup} from "../templates/TemplatePopup"
 import {showUserError} from "../misc/ErrorHandlerImpl"
 import {formatPrice} from "../subscription/PriceUtils"
 import {KnowledgeBaseView} from "../knowledgebase/KnowledgeBaseView"
+import type {ButtonAttrs} from "../gui/base/ButtonN"
 
 export type MailEditorAttrs = {
 	model: SendMailModel,
@@ -156,7 +157,24 @@ export class MailEditor implements MComponent<MailEditorAttrs> {
 					})
 					m.redraw()
 				})
-		this.toolbar = new RichTextToolbar(this.editor, {imageButtonClickHandler: insertImageHandler})
+
+		const templateButtonAttrs: ButtonAttrs = {
+			label: "template_label",
+			click: () => {
+				if (logins.getUserController().getTemplateMemberships().length > 0) {
+					openTemplateFeature(this.editor)
+				} else {
+					Dialog.error(() => "You are not a Member of a template group") // TODO: Option to buy
+				}
+			},
+			type: ButtonType.Toggle,
+			icon: () => Icons.ListAlt,
+		}
+
+		this.toolbar = new RichTextToolbar(this.editor, {
+			imageButtonClickHandler: insertImageHandler,
+			customButtonAttrs: [templateButtonAttrs]
+		})
 
 		this.recipientFields = {
 			to: new MailEditorRecipientField(model, "to", locator.contactModel),
@@ -260,11 +278,6 @@ export class MailEditor implements MComponent<MailEditorAttrs> {
 			})
 			: null
 
-		const templateButtonAttrs = {
-			label: "templateOpen_label",
-			click: () => openTemplateFeature(this.editor),
-			icon: () => Icons.ListAlt,
-		}
 
 		const knowledgebaseButtonAttrs = {
 			label: () => "Open Knowledgebase Panel",
@@ -283,7 +296,8 @@ export class MailEditor implements MComponent<MailEditorAttrs> {
 				return showConfidentialButton
 					? [m(ButtonN, confidentialButtonAttrs), m(ButtonN, attachFilesButtonAttrs), toolbarButton()]
 					: [
-						m(ButtonN, templateButtonAttrs), showKnowlegdeBaseButton ? m(ButtonN, knowledgebaseButtonAttrs) : null, m(ButtonN, attachFilesButtonAttrs),
+						showKnowlegdeBaseButton ? m(ButtonN, knowledgebaseButtonAttrs) : null,
+						m(ButtonN, attachFilesButtonAttrs),
 						toolbarButton()
 					]
 			}

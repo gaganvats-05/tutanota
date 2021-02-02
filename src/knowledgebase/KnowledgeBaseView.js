@@ -150,7 +150,9 @@ export class KnowledgeBaseView implements MComponent<KnowledgebaseViewAttrs> {
 							showKnowledgeBaseEditor(entry, groupRoot)
 						})
 					},
-					type: ButtonType.Primary
+					type: ButtonType.ActionLarge,
+					icon: () => Icons.Edit,
+					colors: ButtonColors.DrawerNav,
 				})
 			case "template":
 				const title = currentPage.fetchedTemplate ? currentPage.fetchedTemplate.title : lang.get("loading_msg")
@@ -161,12 +163,14 @@ export class KnowledgeBaseView implements MComponent<KnowledgebaseViewAttrs> {
 					colors: ButtonColors.DrawerNav,
 					type: ButtonType.ActionLarge
 				}, {
-					label: "submit_label",
+					label: "selectTemplate_action",
 					click: () => {
 						attrs.onSubmit(knowledgebase.getContentFromTemplate(currentPage.language, currentPage.fetchedTemplate))
 						this._removeLastPage()
 					},
-					type: ButtonType.Primary
+					icon: () => Icons.Checkmark,
+					colors: ButtonColors.DrawerNav,
+					type: ButtonType.ActionLarge
 				})
 			default:
 				throw new Error("stub")
@@ -233,13 +237,17 @@ export class KnowledgeBaseView implements MComponent<KnowledgebaseViewAttrs> {
 				click: () => {
 					showKnowledgeBaseEditor(null, templateGroupInstances[0].groupRoot)
 				},
-				type: ButtonType.Primary,
+				type: ButtonType.ActionLarge,
+				icon: () => Icons.Add,
+				colors: ButtonColors.DrawerNav
 			}
 		} else {
 			return attachDropdown({
 				label: "addEntry_label",
 				click: noOp,
-				type: ButtonType.Primary,
+				type: ButtonType.ActionLarge,
+				icon: () => Icons.Add,
+				colors: ButtonColors.DrawerNav
 			}, () => templateGroupInstances.map(groupInstances => {
 				return {
 					label: () => groupInstances.groupInfo.name,

@@ -86,14 +86,14 @@ export class KnowledgeBaseListView implements UpdatableSettingsViewer {
 
 	view(): Children {
 		return m(".flex.flex-column.fill-absolute", [
-			m(".flex.plr-l.list-border-right.list-bg.list-header",
-					m(".mr-negative-s.align-self-end", m(ButtonN, {
-						label: "addEntry_label",
-						type: ButtonType.Primary,
-						click: () => {
-							showKnowledgeBaseEditor(null, this._templateGroupRoot)
-						}
-					}))
+			m(".flex.flex-column.justify-center.plr-l.list-border-right.list-bg.list-header",
+				m(".mr-negative-s.align-self-end", m(ButtonN, {
+					label: "addEntry_label",
+					type: ButtonType.Primary,
+					click: () => {
+						showKnowledgeBaseEditor(null, this._templateGroupRoot)
+					}
+				}))
 			),
 			m(".rel.flex-grow", this._list ? m(this._list) : null)
 		])
@@ -102,7 +102,8 @@ export class KnowledgeBaseListView implements UpdatableSettingsViewer {
 	entityEventsReceived(updates: $ReadOnlyArray<EntityUpdateData>): Promise<void> {
 		return Promise.each(updates, update => {
 			const list = this._list
-			if (list && this._listId && isUpdateForTypeRef(KnowledgeBaseEntryTypeRef, update) && isSameId(this._listId, update.instanceListId)) {
+			if (list && this._listId && isUpdateForTypeRef(KnowledgeBaseEntryTypeRef, update)
+				&& isSameId(this._listId, update.instanceListId)) {
 				return this._list.entityEventReceived(update.instanceId, update.operation)
 			}
 		}).then(() => {

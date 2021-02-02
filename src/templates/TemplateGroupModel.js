@@ -1,16 +1,20 @@
 //@flow
 
+import m from "mithril"
 import type {GroupInfo} from "../api/entities/sys/GroupInfo"
 import type {TemplateGroupRoot} from "../api/entities/tutanota/TemplateGroupRoot"
-import {EventController} from "../api/main/EventController"
+import {EventController, isUpdateForTypeRef} from "../api/main/EventController"
 import type {LoginController} from "../api/main/LoginController"
 import {EntityClient} from "../api/common/EntityClient"
-import type {EntityEventsListener} from "../api/main/EventController"
+import type {EntityUpdateData} from "../api/main/EventController"
 import {LazyLoaded} from "../api/common/utils/LazyLoaded"
 import type {GroupMembership} from "../api/entities/sys/GroupMembership"
 import {GroupInfoTypeRef} from "../api/entities/sys/GroupInfo"
 import {TemplateGroupRootTypeRef} from "../api/entities/tutanota/TemplateGroupRoot"
 import {neverNull} from "../api/common/utils/Utils"
+import {UserTypeRef} from "../api/entities/sys/User"
+import {isSameId} from "../api/common/utils/EntityUtils"
+import {logins} from "../api/main/LoginController"
 
 export type TemplateGroupInstances = {
 	groupInfo: GroupInfo,
@@ -20,7 +24,6 @@ export type TemplateGroupInstances = {
 
 export class TemplateGroupModel {
 	+_eventController: EventController;
-	+_entityEventReceived: EntityEventsListener;
 	+_logins: LoginController;
 	+_entityClient: EntityClient;
 	_groupInstances: LazyLoaded<Array<TemplateGroupInstances>>
@@ -35,6 +38,9 @@ export class TemplateGroupModel {
 				return this._loadGroupInstances(templateMembership)
 			} , {concurrency:1})
 		}, [])
+		this._eventController.addEntityListener( (updates) => {
+			return this._entityEventsReceived(updates)
+		})
 	}
 
 	_loadGroupInstances(templateGroupMembership: GroupMembership): Promise<TemplateGroupInstances> {
@@ -56,5 +62,22 @@ export class TemplateGroupModel {
 
 	getGroupInstances():Array<TemplateGroupInstances> {
 		return neverNull(this._groupInstances.getSync())
+	}
+
+	_entityEventsReceived(updates: $ReadOnlyArray<EntityUpdateData>): Promise<void> {
+		const userController = logins.getUserController()
+		return Promise.each(updates, update => {
+			if(isUpdateForTypeRef(UserTypeRef, update) && isSameId(update.instanceId, userController.user._id)) {
+				if (this._groupInstances.isLoaded()){
+					const existingInstances = this.getGroupInstances().map(groupInstances => groupInstances.groupRoot._id)
+					const newMemberships = userController.getTemplateMemberships().map(membership => membership.group)
+					if (existingInstances.length !== newMemberships.length) {
+						this._groupInstances.reset()
+						this._groupInstances.getAsync()
+						m.redraw()
+					}
+				}
+			}
+		}).return()
 	}
 }

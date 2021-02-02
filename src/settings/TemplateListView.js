@@ -89,14 +89,14 @@ export class TemplateListView implements UpdatableSettingsViewer {
 
 	view(): Children {
 		return m(".flex.flex-column.fill-absolute", [
-			m(".flex.plr-l.list-border-right.list-bg.list-header",
-					m(".mr-negative-s.align-self-end", m(ButtonN, {
-						label: "addTemplate_label",
-						type: ButtonType.Primary,
-						click: () => {
-							showTemplateEditor(null, this._templateGroupRoot)
-						}
-					}))
+			m(".flex.flex-column.justify-center.plr-l.list-border-right.list-bg.list-header",
+				m(".mr-negative-s.align-self-end", m(ButtonN, {
+					label: "addTemplate_label",
+					type: ButtonType.Primary,
+					click: () => {
+						showTemplateEditor(null, this._templateGroupRoot)
+					}
+				}))
 			),
 			m(".rel.flex-grow", this._list ? m(this._list) : null)
 		])
