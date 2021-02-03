@@ -211,8 +211,8 @@ export class SettingsView implements CurrentView {
 		return this._currentViewer
 	}
 
-	_createTemplateGroupExpander() {
-		locator.templateGroupModel.init().then(templateGroupInstances => {
+	_createTemplateGroupExpander(): Promise<void> {
+		return locator.templateGroupModel.init().then(templateGroupInstances => {
 				this._templateGroupExpander = []
 				templateGroupInstances.forEach(templateGroupInstance => {
 					// Create Settingsfolder
@@ -243,8 +243,7 @@ export class SettingsView implements CurrentView {
 	updateUrl(args: Object) {
 		if (!args.folder) {
 			this._setUrl(this._userFolders[0].url)
-		} else if (args.folder && this._selectedFolder.path !== args.folder
-			|| !m.route.get().startsWith("/settings")) { // ensure that current viewer will be reinitialized
+		} else if (args.folder || !m.route.get().startsWith("/settings")) { // ensure that current viewer will be reinitialized
 			let folder = this._userFolders.find(f => f.path === args.folder)
 			if (!folder && logins.getUserController().isGlobalOrLocalAdmin()) {
 				folder = this._adminFolders.find(f => f.path === args.folder)
@@ -257,7 +256,10 @@ export class SettingsView implements CurrentView {
 			}
 			if (!folder) {
 				this._setUrl(this._userFolders[0].url)
-			} else {
+			}  else if(this._selectedFolder.path === folder.path) {// folder path has not changed
+				this._selectedFolder = folder // instance of SettingsFolder might habe been changed in membership update, so replace this instance
+				m.redraw()
+			} else { // folder path has changed
 				this._selectedFolder = folder
 				this._currentViewer = null
 				this.detailsViewer = null
@@ -297,7 +299,10 @@ export class SettingsView implements CurrentView {
 					const newTemplateGroupMemberships = logins.getUserController().getTemplateMemberships().map(membership => membership.group)
 					if (existingTemplateGroupMemberships.length !== newTemplateGroupMemberships.length) {
 						this._createTemplateGroupExpander()
-						this._setUrl(this._userFolders[0].url)
+						    .then(() => {
+						    	this._setUrl(m.route.get())
+							    m.redraw()
+						    })
 					}
 					m.redraw()
 				})

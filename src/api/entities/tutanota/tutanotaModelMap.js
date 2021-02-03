@@ -120,6 +120,7 @@ const map: {[string]: () => mixed} = {
     KnowledgeBaseEntryKeywords: () => import('./KnowledgeBaseEntryKeywords'),
     KnowledgeBaseEntry: () => import('./KnowledgeBaseEntry'),
     TemplateGroupRoot: () => import('./TemplateGroupRoot'),
-    TemplateGroupPostData: () => import('./TemplateGroupPostData')
+    TemplateGroupPostData: () => import('./TemplateGroupPostData'),
+    TemplateGroupDeleteData: () => import('./TemplateGroupDeleteData')
 }
 export default map

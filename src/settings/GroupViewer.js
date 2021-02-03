@@ -4,7 +4,7 @@ import {assertMainOrNode} from "../api/Env"
 import {TextField} from "../gui/base/TextField"
 import {Button} from "../gui/base/Button"
 import {Dialog} from "../gui/base/Dialog"
-import {load, loadAll, loadRange, update} from "../api/main/Entity"
+import {load, loadAll, loadRange, serviceRequestVoid, update} from "../api/main/Entity"
 import {formatDateWithMonth, formatStorageSize} from "../misc/Formatter"
 import {lang} from "../misc/LanguageViewModel"
 import {DropDownSelector} from "../gui/base/DropDownSelector"
@@ -34,6 +34,10 @@ import {isUpdateForTypeRef} from "../api/main/EventController"
 import {CustomerTypeRef} from "../api/entities/sys/Customer"
 import {compareGroupInfos, getGroupInfoDisplayName} from "../api/common/utils/GroupUtils";
 import {GENERATED_MAX_ID, GENERATED_MIN_ID, isSameId} from "../api/common/utils/EntityUtils";
+import {ButtonN, ButtonType} from "../gui/base/ButtonN"
+import {createTemplateGroupDeleteData} from "../api/entities/tutanota/TemplateGroupDeleteData"
+import {TutanotaService} from "../api/entities/tutanota/Services"
+import {HttpMethod} from "../api/common/EntityFunctions"
 
 assertMainOrNode()
 
@@ -178,7 +182,20 @@ export class GroupViewer {
 		this.view = () => {
 			return [
 				m("#user-viewer.fill-absolute.scroll.plr-l", [
-					m(".h4.mt-l", (this._group.isLoaded()) ? getGroupTypeName(this._group.getLoaded().type) : lang.get("emptyString_msg")),
+					m(".flex.mt-l.center-vertically", [
+						m(".h4", (this._group.isLoaded()) ? getGroupTypeName(this._group.getLoaded().type) : lang.get("emptyString_msg")),
+						this.groupInfo.groupType === GroupType.Template
+							? m(".flex.flex-grow.justify-end.mr-negative-s", m(ButtonN, {
+								label: "remove_action",
+								icon: () => Icons.Trash,
+								type: ButtonType.Action,
+								click: () => {
+									const deleteGroupData = createTemplateGroupDeleteData({group: this._group.getLoaded()._id})
+									serviceRequestVoid(TutanotaService.TemplateGroupService, HttpMethod.DELETE, deleteGroupData)
+								}
+							}))
+							: null,
+					]),
 					m("", [
 						m(created),
 						(this._isMailGroup()) ? m(this._usedStorage) : null,
@@ -187,7 +204,7 @@ export class GroupViewer {
 						m(this._name),
 						(logins.getUserController().isGlobalAdmin() && this._administratedBy) ?
 							m(this._administratedBy) : null,
-						m(this._deactivated)
+						this.groupInfo.groupType !== GroupType.Template ? m(this._deactivated) : null
 					]),
 					(!this.groupInfo.deleted) ? m(".h4.mt-l.mb-s", lang.get('groupMembers_label')) : null,
 					(!this.groupInfo.deleted) ? m(this._membersTable) : null,
@@ -342,7 +359,7 @@ export function getGroupTypeName(groupType: NumberString): string {
 		return lang.get("localAdmin_label")
 	} else if (groupType === GroupType.User) {
 		return lang.get("userColumn_label")
-	}else if (groupType === GroupType.Template) {
+	} else if (groupType === GroupType.Template) {
 		return lang.get("templateGroup_label")
 	} else {
 		return groupType // just for testing

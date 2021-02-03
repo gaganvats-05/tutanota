@@ -55,6 +55,7 @@ export class KnowledgeBaseView implements MComponent<KnowledgebaseViewAttrs> {
 	_searchbarValue: Stream<string>
 	_redrawStream: Stream<*>
 	_pages: Stream<Array<Page>>;
+	_inputDom: HTMLElement
 
 	constructor() {
 		this._searchbarValue = stream("")
@@ -76,7 +77,7 @@ export class KnowledgeBaseView implements MComponent<KnowledgebaseViewAttrs> {
 	}
 
 	view({attrs}: Vnode<KnowledgebaseViewAttrs>): Children {
-		return m(".flex.flex-column.abs.elevated-bg", {
+		return m(".flex.flex-column.abs.elevated-bg.dropdown-shadow.ml-l", {
 			style: {
 				height: px(KNOWLEDGEBASE_PANEL_HEIGHT),
 				width: px(KNOWLEDGEBASE_PANEL_WIDTH),
@@ -184,7 +185,8 @@ export class KnowledgeBaseView implements MComponent<KnowledgebaseViewAttrs> {
 			value: this._searchbarValue,
 			oninput: (input) => {
 				model.filter(input)
-			}
+			},
+			focusOnCreate: true,
 		}
 		return m(TextFieldN, searchBarAttrs)
 	}

@@ -61,7 +61,6 @@ class KnowledgeBaseEditor implements MComponent<KnowledgeBaseEditorModel> {
 
 	constructor(vnode: Vnode<KnowledgeBaseEditorModel>) {
 		const model = vnode.attrs
-		console.log("vnode", vnode)
 		this._enterTitleAttrs = {
 			label: "title_label",
 			value: model.title

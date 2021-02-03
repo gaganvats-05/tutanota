@@ -24,7 +24,8 @@ export class TemplateExpander implements MComponent<TemplateExpanderAttrs> {
 		const selectedContent = model.getSelectedContent()
 		return m(".flex.flex-column.flex-grow", {
 			style: {
-				maxHeight: px(TEMPLATE_POPUP_HEIGHT) // maxHeight has to be set, because otherwise the content would overflow outside the flexbox
+				// maxHeight has to be set, because otherwise the content would overflow outside the flexbox (-44 because of header height)
+				maxHeight: px(TEMPLATE_POPUP_HEIGHT - 44)
 			},
 			onkeydown: (e) => {
 				if (isKeyPressed(e.keyCode, Keys.TAB)) {
@@ -32,7 +33,7 @@ export class TemplateExpander implements MComponent<TemplateExpanderAttrs> {
 				}
 			}
 		}, [
-			m(".scroll.overflow-wrap",
+			m(".scroll.overflow-wrap.flex-grow",
 				selectedContent ? m.trust(selectedContent.text) : null
 			)
 		])

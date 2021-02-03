@@ -123,6 +123,7 @@ export class TemplatePopup implements ModalComponent {
 					left: px(this._rect.left)
 				},
 				onclick: (e) => {
+					this._inputDom.focus()
 					e.stopPropagation()
 				},
 				oncreate: () => {
@@ -277,6 +278,7 @@ export class TemplatePopup implements ModalComponent {
 				m(".flex.template-list-row" + (this._templateModel.isSelectedTemplate(template) ? ".row-selected" : ""), {
 						onclick: (e) => {
 							this._templateModel.setSelectedTemplate(template)
+							this._inputDom.focus()
 							e.stopPropagation()
 						},
 					}, [
