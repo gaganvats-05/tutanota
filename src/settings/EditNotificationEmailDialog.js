@@ -19,9 +19,9 @@ import {CustomerInfoTypeRef} from "../api/entities/sys/CustomerInfo"
 import {PayloadTooLargeError} from "../api/common/error/RestError"
 import {SegmentControl} from "../gui/base/SegmentControl"
 import type {CustomerProperties} from "../api/entities/sys/CustomerProperties"
-import {insertInlineImageB64ClickHandler} from "../mail/MailViewerUtils"
+import {insertInlineImageB64ClickHandler} from "../mail/view/MailViewerUtils"
 import type {SelectorItemList} from "../gui/base/DropDownSelectorN"
-import {UserError} from "../api/common/error/UserError"
+import {UserError} from "../api/main/UserError"
 
 export function show(existingTemplate: ?NotificationMailTemplate, customerProperties: LazyLoaded<CustomerProperties>) {
 	let template: NotificationMailTemplate

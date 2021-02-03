@@ -33,7 +33,7 @@ import {deviceConfig} from "../misc/DeviceConfig"
 import {SubscriptionType} from "./SubscriptionUtils"
 import type {WizardPageAttrs, WizardPageN} from "../gui/base/WizardDialogN"
 import {emitWizardEvent, WizardEventType} from "../gui/base/WizardDialogN"
-import {SignupForm} from "../api/main/SignupForm"
+import {SignupForm} from "./SignupForm"
 
 
 type ConfirmStatus = {

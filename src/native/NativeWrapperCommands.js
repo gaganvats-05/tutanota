@@ -8,7 +8,7 @@ import type {LoginController} from "../api/main/LoginController"
 const createMailEditor = (msg: Request): Promise<void> => {
 	return Promise.all([
 		import('../api/main/MainLocator.js'),
-		import('../mail/MailEditor.js'),
+		import('../mail/editor/MailEditor.js'),
 		import('../mail/MailUtils.js'),
 		import('../api/main/LoginController.js')
 	]).then(([mainLocatorModule, mailEditorModule, mailUtilsModule, {logins}]) => {

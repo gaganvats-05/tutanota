@@ -29,7 +29,7 @@ import {NBSP} from "../api/common/utils/StringUtils"
 import {isSameTypeRef} from "../api/common/utils/EntityUtils";
 import type {ButtonAttrs} from "../gui/base/ButtonN"
 import {attachDropdown} from "../gui/base/DropdownN"
-import {bundleMails, exportMails, moveMails} from "../mail/MailGuiUtils"
+import {bundleMails, exportMails, moveMails} from "../mail/view/MailGuiUtils"
 
 assertMainOrNode()
 

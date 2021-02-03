@@ -1,16 +1,16 @@
 // @flow
 
 import m from "mithril"
-import {theme} from "../gui/theme"
-import {px, size} from "../gui/size"
-import {DAY_IN_MILLIS} from "../api/common/utils/DateUtils"
-import {numberRange} from "../api/common/utils/ArrayUtils"
-import {expandEvent, getEventColor, getEventText, getTimeZone, hasAlarmsForTheUser, layOutEvents} from "./CalendarUtils"
+import {theme} from "../../gui/theme"
+import {px, size} from "../../gui/size"
+import {DAY_IN_MILLIS} from "../../api/common/utils/DateUtils"
+import {numberRange} from "../../api/common/utils/ArrayUtils"
+import {expandEvent, getEventColor, getEventText, getTimeZone, hasAlarmsForTheUser, layOutEvents} from "../CalendarUtils"
 import {CalendarEventBubble} from "./CalendarEventBubble"
-import {EventTextTimeOption} from "../api/common/TutanotaConstants"
-import {neverNull} from "../api/common/utils/Utils"
-import {isAllDayEvent} from "../api/common/utils/CommonCalendarUtils"
-import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
+import {EventTextTimeOption} from "../../api/common/TutanotaConstants"
+import {neverNull} from "../../api/common/utils/Utils"
+import {isAllDayEvent} from "../../api/common/utils/CommonCalendarUtils"
+import type {CalendarEvent} from "../../api/entities/tutanota/CalendarEvent"
 
 export type Attrs = {
 	onEventClicked: (event: CalendarEvent, domEvent: Event) => mixed,

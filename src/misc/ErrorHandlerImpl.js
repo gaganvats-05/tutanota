@@ -36,7 +36,7 @@ import {locator} from "../api/main/MainLocator"
 import {QuotaExceededError} from "../api/common/error/QuotaExceededError"
 import {copyToClipboard} from "./ClipboardUtils"
 import {px} from "../gui/size"
-import {UserError} from "../api/common/error/UserError"
+import {UserError} from "../api/main/UserError"
 import {showMoreStorageNeededOrderDialog} from "../subscription/SubscriptionUtils"
 
 assertMainOrNode()

@@ -133,7 +133,6 @@ async function buildWebapp(version) {
 	const bundle = await rollup({
 		input: ["src/app.js", "src/api/worker/worker.js"],
 		plugins: [
-			analyze({limit: 10, hideDeps: true}),
 			babel({
 				plugins: [
 					// Using Flow plugin and not preset to run before class-properties and avoid generating strange property code
@@ -156,7 +155,25 @@ async function buildWebapp(version) {
 			commonjs({
 				exclude: "src/**",
 			}),
-			terser()
+			terser(),
+			{
+				name: "analyze",
+				generateBundle(outOpts, bundle, isWrite) {
+					const prefix = __dirname
+					for (const [key, value] of Object.entries(bundle)) {
+						if (key.startsWith("translation")) continue
+
+						console.log(key, "\t", value.code.length / 1024 + "K")
+						for (const module of Object.keys(value.modules)) {
+							if (module.includes("src/api/entities")) {
+								continue
+							}
+							const moduleName = module.startsWith(prefix) ? module.substring(prefix.length) : module
+							console.log("\t" + moduleName)
+						}
+					}
+				},
+			}
 		],
 		perf: true,
 	})
@@ -169,9 +186,41 @@ async function buildWebapp(version) {
 		sourcemap: true,
 		format: "system",
 		dir: "build/dist",
-		manualChunks: (id, {getModuleInfo, getModuleIds}) => {
+		manualChunks(id, {getModuleInfo, getModuleIds}) {
 			if (id.includes("api/entities")) {
 				return "entities"
+			} else if (id.includes("src/mail/view")) {
+				return "mail-view"
+			} else if (id.includes("src/native")) {
+				return "native"
+			} else if (id.includes("src/mail/editor")) {
+				return "mail-editor"
+			} else if (id.includes("src/search")) {
+				return "search"
+			} else if (id.includes("src/calendar/view")) {
+				return "calendar-view"
+			} else if (id.includes("src/contacts")) {
+				return "contacts"
+			} else if (id.includes("src/gui/base")) {
+				return "gui-base"
+			} else if (id.includes("src/login")) {
+				return "login"
+			} else if (id.includes("src/api/common/utils/EntityUtils")) {
+				return "entity-utils"
+			} else if (id.includes("src/api/common")) {
+				return "common"
+			} else if (id.includes("rollupPluginBabelHelpers") || id.includes("commonjsHelpers")) {
+				return "polyfill-helpers"
+			} else if (id.includes("src/api/Env")) {
+				return "env"
+			} else if (id.includes("src/subscription")) {
+				return "subscription"
+			} else if (id.includes("src/settings")) {
+				return "settings"
+			} else if (id.includes("src/misc")) {
+				return "misc"
+			} else if (id.includes("src/api/main")) {
+				return "api-main"
 			} else {
 				// Put all translations into "translation-code"
 				// Almost like in Rollup example: https://rollupjs.org/guide/en/#outputmanualchunks

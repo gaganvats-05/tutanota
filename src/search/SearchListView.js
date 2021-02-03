@@ -4,7 +4,6 @@ import {List} from "../gui/base/List"
 import {assertMainOrNode} from "../api/Env"
 import {lang} from "../misc/LanguageViewModel"
 import {size} from "../gui/size"
-import {MailRow} from "../mail/MailListView"
 import type {Mail} from "../api/entities/tutanota/Mail"
 import {MailTypeRef} from "../api/entities/tutanota/Mail"
 import {erase, load, loadMultiple} from "../api/main/Entity"
@@ -31,7 +30,8 @@ import {
 	sortCompareByReverseId, TypeRef
 } from "../api/common/utils/EntityUtils";
 import type {ListElement} from "../api/common/utils/EntityUtils"
-import {archiveMails, moveToInbox, showDeleteConfirmationDialog} from "../mail/MailGuiUtils";
+import {archiveMails, moveToInbox, showDeleteConfirmationDialog} from "../mail/view/MailGuiUtils";
+import {MailRow} from "../mail/view/MailRow";
 
 assertMainOrNode()
 

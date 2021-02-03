@@ -1,9 +1,9 @@
 // @flow
 
 import m from "mithril"
-import {getStartOfDay, incrementDate} from "../api/common/utils/DateUtils"
-import {styles} from "../gui/styles"
-import {formatTime} from "../misc/Formatter"
+import {getStartOfDay, incrementDate} from "../../api/common/utils/DateUtils"
+import {styles} from "../../gui/styles"
+import {formatTime} from "../../misc/Formatter"
 import {
 	CALENDAR_EVENT_HEIGHT, DEFAULT_HOUR_OF_DAY,
 	eventEndsAfterDay,
@@ -16,22 +16,22 @@ import {
 	getTimeZone,
 	getWeekNumber,
 	layOutEvents
-} from "./CalendarUtils"
+} from "../CalendarUtils"
 import {CalendarDayEventsView, calendarDayTimes} from "./CalendarDayEventsView"
-import {neverNull} from "../api/common/utils/Utils"
-import {isAllDayEvent} from "../api/common/utils/CommonCalendarUtils"
-import {theme} from "../gui/theme"
-import {px, size} from "../gui/size"
+import {neverNull} from "../../api/common/utils/Utils"
+import {isAllDayEvent} from "../../api/common/utils/CommonCalendarUtils"
+import {theme} from "../../gui/theme"
+import {px, size} from "../../gui/size"
 import {ContinuingCalendarEventBubble} from "./ContinuingCalendarEventBubble"
-import type {WeekStartEnum} from "../api/common/TutanotaConstants"
-import {EventTextTimeOption, WeekStart} from "../api/common/TutanotaConstants"
-import {lastThrow} from "../api/common/utils/ArrayUtils"
-import {Icon} from "../gui/base/Icon"
-import {Icons} from "../gui/base/icons/Icons"
-import {lang} from "../misc/LanguageViewModel"
-import {PageView} from "../gui/base/PageView"
-import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
-import {logins} from "../api/main/LoginController"
+import type {WeekStartEnum} from "../../api/common/TutanotaConstants"
+import {EventTextTimeOption, WeekStart} from "../../api/common/TutanotaConstants"
+import {lastThrow} from "../../api/common/utils/ArrayUtils"
+import {Icon} from "../../gui/base/Icon"
+import {Icons} from "../../gui/base/icons/Icons"
+import {lang} from "../../misc/LanguageViewModel"
+import {PageView} from "../../gui/base/PageView"
+import type {CalendarEvent} from "../../api/entities/tutanota/CalendarEvent"
+import {logins} from "../../api/main/LoginController"
 
 export type Attrs = {
 	selectedDate: Date,

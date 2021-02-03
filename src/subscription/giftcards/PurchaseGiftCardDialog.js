@@ -28,7 +28,7 @@ import {
 } from "./GiftCardUtils"
 import type {DialogHeaderBarAttrs} from "../../gui/base/DialogHeaderBar"
 import {showUserError} from "../../misc/ErrorHandlerImpl"
-import {UserError} from "../../api/common/error/UserError"
+import {UserError} from "../../api/main/UserError"
 import {Keys, PaymentMethodType} from "../../api/common/TutanotaConstants"
 import {lang} from "../../misc/LanguageViewModel"
 import {BadGatewayError, NotAuthorizedError, PreconditionFailedError} from "../../api/common/error/RestError"

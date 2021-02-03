@@ -2,9 +2,9 @@
 
 
 import m from "mithril"
-import {px, size} from "../gui/size"
-import type {WeekStartEnum} from "../api/common/TutanotaConstants"
-import {EventTextTimeOption, WeekStart} from "../api/common/TutanotaConstants"
+import {px, size} from "../../gui/size"
+import type {WeekStartEnum} from "../../api/common/TutanotaConstants"
+import {EventTextTimeOption, WeekStart} from "../../api/common/TutanotaConstants"
 import {CalendarEventBubble} from "./CalendarEventBubble"
 import {
 	CALENDAR_EVENT_HEIGHT,
@@ -18,21 +18,21 @@ import {
 	getTimeZone,
 	getWeekNumber,
 	layOutEvents
-} from "./CalendarUtils"
-import {getDateIndicator, incrementDate} from "../api/common/utils/DateUtils"
-import {lastThrow} from "../api/common/utils/ArrayUtils"
-import {theme} from "../gui/theme"
+} from "../CalendarUtils"
+import {getDateIndicator, incrementDate} from "../../api/common/utils/DateUtils"
+import {lastThrow} from "../../api/common/utils/ArrayUtils"
+import {theme} from "../../gui/theme"
 import {ContinuingCalendarEventBubble} from "./ContinuingCalendarEventBubble"
-import {styles} from "../gui/styles"
-import {formatMonthWithFullYear} from "../misc/Formatter"
-import {isAllDayEvent, isAllDayEventByTimes} from "../api/common/utils/CommonCalendarUtils"
-import {windowFacade} from "../misc/WindowFacade"
-import {neverNull} from "../api/common/utils/Utils"
-import {Icon} from "../gui/base/Icon"
-import {Icons} from "../gui/base/icons/Icons"
-import {PageView} from "../gui/base/PageView"
-import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
-import type {CalendarDay} from "./CalendarUtils"
+import {styles} from "../../gui/styles"
+import {formatMonthWithFullYear} from "../../misc/Formatter"
+import {isAllDayEvent, isAllDayEventByTimes} from "../../api/common/utils/CommonCalendarUtils"
+import {windowFacade} from "../../misc/WindowFacade"
+import {neverNull} from "../../api/common/utils/Utils"
+import {Icon} from "../../gui/base/Icon"
+import {Icons} from "../../gui/base/icons/Icons"
+import {PageView} from "../../gui/base/PageView"
+import type {CalendarEvent} from "../../api/entities/tutanota/CalendarEvent"
+import type {CalendarDay} from "../CalendarUtils"
 
 type CalendarMonthAttrs = {
 	selectedDate: Date,

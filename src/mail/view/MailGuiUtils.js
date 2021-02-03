@@ -1,20 +1,20 @@
 //@flow
-import type {MailModel} from "./MailModel"
-import type {Mail} from "../api/entities/tutanota/Mail"
-import {LockedError, PreconditionFailedError} from "../api/common/error/RestError"
-import {Dialog} from "../gui/base/Dialog"
-import type {MailFolder} from "../api/entities/tutanota/MailFolder"
-import {locator} from "../api/main/MainLocator";
-import {sortableTimestamp} from "../api/common/utils/DateUtils"
-import {fileController} from "../file/FileController"
-import {logins} from "../api/main/LoginController"
-import {FeatureType} from "../api/common/TutanotaConstants"
-import type {MailBundle} from "./MailUtils"
-import {getArchiveFolder, getFolderIcon, getInboxFolder, makeMailBundle} from "./MailUtils"
-import type {AllIconsEnum} from "../gui/base/Icon"
-import {Icons} from "../gui/base/icons/Icons"
-import {worker} from "../api/main/WorkerClient"
-import {mailToEmlFile} from "./Exporter"
+import type {MailModel} from "../MailModel"
+import type {Mail} from "../../api/entities/tutanota/Mail"
+import {LockedError, PreconditionFailedError} from "../../api/common/error/RestError"
+import {Dialog} from "../../gui/base/Dialog"
+import type {MailFolder} from "../../api/entities/tutanota/MailFolder"
+import {locator} from "../../api/main/MainLocator";
+import {sortableTimestamp} from "../../api/common/utils/DateUtils"
+import {fileController} from "../../file/FileController"
+import {logins} from "../../api/main/LoginController"
+import {FeatureType} from "../../api/common/TutanotaConstants"
+import type {MailBundle} from "../MailUtils"
+import {getArchiveFolder, getFolderIcon, getInboxFolder, makeMailBundle} from "../MailUtils"
+import type {AllIconsEnum} from "../../gui/base/Icon"
+import {Icons} from "../../gui/base/icons/Icons"
+import {worker} from "../../api/main/WorkerClient"
+import {mailToEmlFile} from "../Exporter"
 
 export function showDeleteConfirmationDialog(mails: $ReadOnlyArray<Mail>): Promise<boolean> {
 	let groupedMails = mails.reduce((all, mail) => {

@@ -20,7 +20,7 @@ import {
 	ShareCapability,
 	TimeFormat
 } from "../../../src/api/common/TutanotaConstants"
-import type {CalendarInfo} from "../../../src/calendar/CalendarView"
+import type {CalendarInfo} from "../../../src/calendar/view/CalendarView"
 import {createGroupMembership} from "../../../src/api/entities/sys/GroupMembership"
 import type {User} from "../../../src/api/entities/sys/User"
 import {createUser} from "../../../src/api/entities/sys/User"
@@ -36,7 +36,7 @@ import {getAllDayDateUTCFromZone} from "../../../src/calendar/CalendarUtils"
 import {DateTime} from "luxon"
 import {createMailAddressAlias} from "../../../src/api/entities/sys/MailAddressAlias"
 import {RecipientInfoType} from "../../../src/api/common/RecipientInfo"
-import {SendMailModel} from "../../../src/mail/SendMailModel"
+import {SendMailModel} from "../../../src/mail/editor/SendMailModel"
 import type {LoginController} from "../../../src/api/main/LoginController"
 import type {ContactModel} from "../../../src/contacts/ContactModel"
 import {EventController} from "../../../src/api/main/EventController"

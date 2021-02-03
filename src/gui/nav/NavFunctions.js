@@ -11,6 +11,6 @@ export function showSupportDialog() {
 }
 
 export function writeInviteMail() {
-	import("../../mail/MailEditor.js")
+	import("../../mail/editor/MailEditor.js")
 		.then(mailEditorModule => mailEditorModule.writeInviteMail())
 }

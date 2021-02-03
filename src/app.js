@@ -25,9 +25,7 @@ import {styles} from "./gui/styles.js"
 import {deviceConfig} from "./misc/DeviceConfig"
 import {Logger, replaceNativeLogger} from "./api/common/Logger"
 import {ButtonType} from "./gui/base/ButtonN"
-import {changeSystemLanguage} from "./native/SystemApp"
 import {Request} from "./api/common/WorkerProtocol"
-import {nativeApp} from "./native/NativeWrapper"
 
 assertMainOrNodeBoot()
 bootFinished()
@@ -68,20 +66,22 @@ if (client.isIE()) {
 		view: () => m("", lang.get("unsupportedBrowserOverlay_msg"))
 	}, {label: "close_alt"}, []))
 } else if (isDesktop()) {
-	nativeApp.initialized().then(() => nativeApp.invokeNative(new Request('isUpdateAvailable', [])))
-	         .then(updateInfo => {
-		         if (updateInfo) {
-			         let message = {view: () => m("", lang.get("updateAvailable_label", {"{version}": updateInfo.version}))}
-			         import("./gui/base/NotificationOverlay.js").then(module => module.show(message, {label: "postpone_action"},
-				         [
-					         {
-						         label: "installNow_action",
-						         click: () => nativeApp.invokeNative(new Request('manualUpdate', [])),
-						         type: ButtonType.Primary
-					         }
-				         ]))
-		         }
-	         })
+	import("./native/NativeWrapper").then(({nativeApp}) => {
+		return nativeApp.initialized().then(() => nativeApp.invokeNative(new Request('isUpdateAvailable', [])))
+		                .then(updateInfo => {
+			                if (updateInfo) {
+				                let message = {view: () => m("", lang.get("updateAvailable_label", {"{version}": updateInfo.version}))}
+				                import("./gui/base/NotificationOverlay.js").then(module => module.show(message, {label: "postpone_action"},
+					                [
+						                {
+							                label: "installNow_action",
+							                click: () => nativeApp.invokeNative(new Request('manualUpdate', [])),
+							                type: ButtonType.Primary
+						                }
+					                ]))
+			                }
+		                })
+	})
 }
 
 export const state: {prefix: ?string, prefixWithoutFile: ?string} = (module.hot && module.hot.data)
@@ -137,8 +137,8 @@ let initialized = lang.init(en).then(() => {
 	const userLanguage = deviceConfig.getLanguage() && languages.find((l) => l.code === deviceConfig.getLanguage())
 	if (userLanguage) {
 		const language = {code: userLanguage.code, languageTag: languageCodeToTag(userLanguage.code)}
-		lang.setLanguage(language)
-		    .then(() => changeSystemLanguage(language))
+		Promise.all([lang.setLanguage(language), import("./native/SystemApp")])
+		       .then(([_, {changeSystemLanguage}]) => changeSystemLanguage(language))
 	}
 
 	function createViewResolver(getView: lazy<Promise<View>>, requireLogin: boolean = true,
@@ -181,7 +181,7 @@ let initialized = lang.init(en).then(() => {
 		}
 	}
 
-	let mailViewResolver = createViewResolver(() => import("./mail/MailView.js")
+	let mailViewResolver = createViewResolver(() => import("./mail/view/MailView.js")
 		.then(module => new module.MailView()))
 	let contactViewResolver = createViewResolver(() => import("./contacts/ContactView.js")
 		.then(module => new module.ContactView()))
@@ -195,7 +195,7 @@ let initialized = lang.init(en).then(() => {
 		.then(module => new module.SearchView()))
 	let contactFormViewResolver = createViewResolver(() => import("./login/ContactFormView.js")
 		.then(module => module.contactFormView), false)
-	const calendarViewResolver = createViewResolver(() => import("./calendar/CalendarView.js")
+	const calendarViewResolver = createViewResolver(() => import("./calendar/view/CalendarView.js")
 		.then(module => new module.CalendarView()), true)
 
 	let start = "/"
@@ -289,11 +289,6 @@ function forceLogin(args: {[string]: string}, requestedPath: string) {
 			m.route.set(`/login?requestedPath=${encodeURIComponent(requestedPath)}`)
 		}
 	}
-}
-
-
-export function __reload(deletedModule: any) {
-	console.log('__reload');
 }
 
 function setupExceptionHandling() {

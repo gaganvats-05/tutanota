@@ -1,11 +1,11 @@
 //@flow
 import m from "mithril"
 import {CalendarEventBubble} from "./CalendarEventBubble"
-import {EventTextTimeOption} from "../api/common/TutanotaConstants"
-import {incrementDate} from "../api/common/utils/DateUtils"
-import {styles} from "../gui/styles"
-import {lang} from "../misc/LanguageViewModel"
-import {formatDate, formatDateWithWeekday} from "../misc/Formatter"
+import {EventTextTimeOption} from "../../api/common/TutanotaConstants"
+import {incrementDate} from "../../api/common/utils/DateUtils"
+import {styles} from "../../gui/styles"
+import {lang} from "../../misc/LanguageViewModel"
+import {formatDate, formatDateWithWeekday} from "../../misc/Formatter"
 import {
 	eventEndsAfterDay,
 	eventStartsBefore,
@@ -14,12 +14,12 @@ import {
 	getStartOfDayWithZone,
 	getTimeZone,
 	hasAlarmsForTheUser
-} from "./CalendarUtils"
-import {isAllDayEvent} from "../api/common/utils/CommonCalendarUtils"
-import {neverNull} from "../api/common/utils/Utils"
-import {px, size} from "../gui/size"
-import {lastThrow} from "../api/common/utils/ArrayUtils"
-import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
+} from "../CalendarUtils"
+import {isAllDayEvent} from "../../api/common/utils/CommonCalendarUtils"
+import {neverNull} from "../../api/common/utils/Utils"
+import {px, size} from "../../gui/size"
+import {lastThrow} from "../../api/common/utils/ArrayUtils"
+import type {CalendarEvent} from "../../api/entities/tutanota/CalendarEvent"
 
 type Attrs = {
 	/**

@@ -1,10 +1,10 @@
 //@flow
-import type {ImageHandler} from "./MailUtils"
-import {fileController} from "../file/FileController"
-import {ALLOWED_IMAGE_FORMATS, MAX_BASE64_IMAGE_SIZE} from "../api/common/TutanotaConstants"
-import {uint8ArrayToBase64} from "../api/common/utils/Encoding"
-import {lang} from "../misc/LanguageViewModel"
-import {Dialog} from "../gui/base/Dialog"
+import type {ImageHandler} from "../MailUtils"
+import {fileController} from "../../file/FileController"
+import {ALLOWED_IMAGE_FORMATS, MAX_BASE64_IMAGE_SIZE} from "../../api/common/TutanotaConstants"
+import {uint8ArrayToBase64} from "../../api/common/utils/Encoding"
+import {lang} from "../../misc/LanguageViewModel"
+import {Dialog} from "../../gui/base/Dialog"
 
 export function insertInlineImageB64ClickHandler(ev: Event, handler: ImageHandler) {
 	fileController.showFileChooser(true, ALLOWED_IMAGE_FORMATS).then((files) => {

@@ -1,15 +1,15 @@
 //@flow
-import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
+import type {CalendarEvent} from "../../api/entities/tutanota/CalendarEvent"
 import m from "mithril"
-import {Icon} from "../gui/base/Icon"
-import {theme} from "../gui/theme"
-import {BootIcons} from "../gui/base/icons/BootIcons"
-import {Icons} from "../gui/base/icons/Icons"
-import {memoized} from "../api/common/utils/Utils"
-import {htmlSanitizer} from "../misc/HtmlSanitizer"
+import {Icon} from "../../gui/base/Icon"
+import {theme} from "../../gui/theme"
+import {BootIcons} from "../../gui/base/icons/BootIcons"
+import {Icons} from "../../gui/base/icons/Icons"
+import {memoized} from "../../api/common/utils/Utils"
+import {htmlSanitizer} from "../../misc/HtmlSanitizer"
 import {iconForAttendeeStatus} from "./CalendarEventEditDialog"
-import {formatEventDuration, getTimeZone} from "./CalendarUtils"
-import {attendeeStatusByCode} from "../api/common/TutanotaConstants"
+import {formatEventDuration, getTimeZone} from "../CalendarUtils"
+import {attendeeStatusByCode} from "../../api/common/TutanotaConstants"
 
 export type Attrs = {
 	event: CalendarEvent,

@@ -1,5 +1,5 @@
 //@flow
-import type {CalendarInfo} from "./CalendarView"
+import type {CalendarInfo} from "./view/CalendarView"
 import type {AlarmIntervalEnum, CalendarAttendeeStatusEnum, EndTypeEnum, RepeatPeriodEnum} from "../api/common/TutanotaConstants"
 import {
 	AccountType,
@@ -51,11 +51,11 @@ import type {IUserController} from "../api/main/UserController"
 import type {RecipientInfo, RecipientInfoTypeEnum} from "../api/common/RecipientInfo"
 import {isExternal, RecipientInfoType} from "../api/common/RecipientInfo"
 import type {Contact} from "../api/entities/tutanota/Contact"
-import {defaultSendMailModel, SendMailModel} from "../mail/SendMailModel"
+import {defaultSendMailModel, SendMailModel} from "../mail/editor/SendMailModel"
 import {firstThrow} from "../api/common/utils/ArrayUtils"
 import {addMapEntry, deleteMapEntry} from "../api/common/utils/MapUtils"
 import type {RepeatRule} from "../api/entities/sys/RepeatRule"
-import {UserError} from "../api/common/error/UserError"
+import {UserError} from "../api/main/UserError"
 import type {Mail} from "../api/entities/tutanota/Mail"
 import {logins} from "../api/main/LoginController"
 import {locator} from "../api/main/MainLocator"

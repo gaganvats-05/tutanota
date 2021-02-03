@@ -1,10 +1,10 @@
 //@flow
 
 import m from "mithril"
-import {colorForBg} from "./CalendarUtils"
-import {px, size} from "../gui/size"
-import {Icon} from "../gui/base/Icon"
-import {Icons} from "../gui/base/icons/Icons"
+import {colorForBg} from "../CalendarUtils"
+import {px, size} from "../../gui/size"
+import {Icon} from "../../gui/base/Icon"
+import {Icons} from "../../gui/base/icons/Icons"
 
 export type CalendarEventBubbleAttrs = {
 	text: string,

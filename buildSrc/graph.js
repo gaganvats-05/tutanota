@@ -6,7 +6,7 @@ function toDot(modules, output) {
 
 	modules.forEach(m => {
 		m.deps.forEach(dep => {
-			buffer += `"${dep}" -> "${m.id}\n"`
+			buffer += `"${dep}" -> "${m.id}"\n`
 		});
 	});
 	buffer += "}\n"

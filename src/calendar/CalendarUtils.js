@@ -40,7 +40,7 @@ import type {User} from "../api/entities/sys/User"
 import type {Group} from "../api/entities/sys/Group"
 import type {GroupMembership} from "../api/entities/sys/GroupMembership"
 import {isColorLight} from "../gui/Color"
-import type {CalendarInfo} from "./CalendarView"
+import type {CalendarInfo} from "./view/CalendarView"
 import {isSameId} from "../api/common/utils/EntityUtils";
 import {insertIntoSortedArray} from "../api/common/utils/ArrayUtils"
 

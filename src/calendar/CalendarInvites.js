@@ -1,7 +1,7 @@
 //@flow
 import {parseCalendarFile} from "./CalendarImporter"
 import {worker} from "../api/main/WorkerClient"
-import {showCalendarEventDialog} from "./CalendarEventEditDialog"
+import {showCalendarEventDialog} from "./view/CalendarEventEditDialog"
 import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
 import type {File as TutanotaFile} from "../api/entities/tutanota/File"
 import {locator} from "../api/main/MainLocator"
@@ -11,11 +11,11 @@ import {CalendarMethod, getAsEnumValue} from "../api/common/TutanotaConstants"
 import {assertNotNull, clone} from "../api/common/utils/Utils"
 import {filterInt, findPrivateCalendar, getTimeZone} from "./CalendarUtils"
 import {logins} from "../api/main/LoginController"
-import {SendMailModel} from "../mail/SendMailModel"
+import {SendMailModel} from "../mail/editor/SendMailModel"
 import type {Mail} from "../api/entities/tutanota/Mail"
 import {calendarUpdateDistributor} from "./CalendarUpdateDistributor"
 import {Dialog} from "../gui/base/Dialog"
-import {UserError} from "../api/common/error/UserError"
+import {UserError} from "../api/main/UserError"
 import {NoopProgressMonitor} from "../api/common/utils/ProgressMonitor"
 
 function getParsedEvent(fileData: DataFile): ?{method: CalendarMethodEnum, event: CalendarEvent, uid: string} {

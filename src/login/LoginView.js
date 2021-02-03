@@ -19,11 +19,10 @@ import {show} from "./RecoverLoginDialog"
 import {header} from "../gui/base/Header"
 import {AriaLandmarks, landmarkAttrs} from "../api/common/utils/AriaUtils"
 import type {ILoginViewController} from "./LoginViewController"
-import {getTokenFromUrl} from "../subscription/giftcards/GiftCardUtils"
 import {loadRedeemGiftCardWizard} from "../subscription/giftcards/RedeemGiftCardWizard"
 import {NotAuthorizedError, NotFoundError} from "../api/common/error/RestError"
 import {worker} from "../api/main/WorkerClient"
-import {UserError} from "../api/common/error/UserError"
+import {UserError} from "../api/main/UserError"
 import {showUserError} from "../misc/ErrorHandlerImpl"
 import {LoginForm} from "./LoginForm"
 import {CredentialsSelector} from "./CredentialsSelector"
@@ -322,13 +321,13 @@ export class LoginView {
 		} else if (requestedPath.startsWith("/giftcard")) {
 
 			const showWizardPromise =
-				Promise.resolve()
-				       .then(() => getTokenFromUrl(location.hash))
-				       .spread((id, key) => {
-					       return worker.initialized
-					                    .then(() => worker.getGiftCardInfo(id, key))
-					                    .then(giftCardInfo => loadRedeemGiftCardWizard(giftCardInfo, key))
-				       })
+				import("../subscription/giftcards/GiftCardUtils")
+					.then(({getTokenFromUrl}) => getTokenFromUrl(location.hash))
+					.spread((id, key) => {
+						return worker.initialized
+						             .then(() => worker.getGiftCardInfo(id, key))
+						             .then(giftCardInfo => loadRedeemGiftCardWizard(giftCardInfo, key))
+					})
 
 			showProgressDialog("loading_msg", showWizardPromise)
 				.then(dialog => dialog.show())

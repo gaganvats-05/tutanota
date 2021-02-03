@@ -59,11 +59,11 @@ import {PermissionError} from "../api/common/error/PermissionError"
 import {ContactEditor} from "../contacts/ContactEditor";
 import {styles} from "../gui/styles"
 import {FolderColumnView} from "../gui/base/FolderColumnView"
-import {newMailEditor} from "../mail/MailEditor"
+import {newMailEditor} from "../mail/editor/MailEditor"
 import {ActionBar} from "../gui/base/ActionBar"
 import {getGroupInfoDisplayName} from "../api/common/utils/GroupUtils"
 import {isSameTypeRef, TypeRef} from "../api/common/utils/EntityUtils";
-import {isNewMailActionAvailable} from "../mail/MailGuiUtils"
+import {isNewMailActionAvailable} from "../mail/view/MailGuiUtils"
 import {showNotAvailableForFreeDialog} from "../subscription/SubscriptionUtils"
 
 assertMainOrNode()

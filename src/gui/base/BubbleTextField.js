@@ -206,12 +206,12 @@ export class BubbleTextField<T> {
 			case 17: // do not react on ctrl key
 				return true
 		}
-		
+
 		// Handle commas
         if (key.key === ",") {
             return this.createBubbles() || false
         }
-        
+
 		this.removeBubbleSelection()
 		return true
 	}

@@ -27,7 +27,7 @@ import m from "mithril"
 import {theme} from "../gui/theme"
 import {getContactListName} from "../contacts/ContactUtils.js"
 import {isSameTypeRef, TypeRef} from "../api/common/utils/EntityUtils";
-import {getMailFolderIcon} from "../mail/MailGuiUtils";
+import {getMailFolderIcon} from "../mail/view/MailGuiUtils";
 
 type SearchBarOverlayAttrs = {
 	state: SearchBarState,

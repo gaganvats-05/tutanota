@@ -17,8 +17,7 @@ import {attachDropdown} from "../base/DropdownN"
 import {noOp} from "../../api/common/utils/Utils"
 import {keyManager} from "../../misc/KeyManager"
 import {showPurchaseGiftCardDialog} from "../../subscription/giftcards/PurchaseGiftCardDialog"
-import {createNotAvailableForFreeClickHandler} from "../../subscription/PriceUtils"
-import {isNewMailActionAvailable} from "../../mail/MailGuiUtils";
+import {isNewMailActionAvailable} from "../../mail/view/MailGuiUtils";
 
 type Attrs = void
 
@@ -37,7 +36,9 @@ export class DrawerMenu implements MComponent<Attrs> {
 					label: "buyGiftCard_label",
 					click: () => {
 						m.route.set("/settings/subscription")
-						showPurchaseGiftCardDialog()
+						import("../../subscription/giftcards/PurchaseGiftCardDialog").then(({showPurchaseGiftCardDialog}) => {
+							return showPurchaseGiftCardDialog()
+						})
 					},
 					type: ButtonType.ActionLarge,
 					colors: ButtonColors.DrawerNav

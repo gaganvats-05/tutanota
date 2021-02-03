@@ -1,11 +1,11 @@
 //@flow
 
 import m from "mithril"
-import type {NavButtonAttrs} from "../gui/base/NavButtonN"
-import {isNavButtonSelected, NavButtonN} from "../gui/base/NavButtonN"
-import type {ButtonAttrs} from "../gui/base/ButtonN"
-import {ButtonN} from "../gui/base/ButtonN"
-import {animations, opacity} from "../gui/animation/Animations"
+import type {NavButtonAttrs} from "../../gui/base/NavButtonN"
+import {isNavButtonSelected, NavButtonN} from "../../gui/base/NavButtonN"
+import type {ButtonAttrs} from "../../gui/base/ButtonN"
+import {ButtonN} from "../../gui/base/ButtonN"
+import {animations, opacity} from "../../gui/animation/Animations"
 
 export type Attrs = {count: number, button: NavButtonAttrs, rightButton: ?ButtonAttrs}
 
