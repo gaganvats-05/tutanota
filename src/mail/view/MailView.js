@@ -25,7 +25,7 @@ import type {Mail} from "../../api/entities/tutanota/Mail"
 import {MailTypeRef} from "../../api/entities/tutanota/Mail"
 import {lazyMemoized, neverNull, noOp} from "../../api/common/utils/Utils"
 import {MailListView} from "./MailListView"
-import {assertMainOrNode, isApp} from "../../api/Env"
+import {assertMainOrNode, isApp} from "../../api/common/Env"
 import type {Shortcut} from "../../misc/KeyManager"
 import {keyManager} from "../../misc/KeyManager"
 import {MultiMailViewer} from "./MultiMailViewer"
@@ -43,10 +43,10 @@ import {
 	getMailboxName,
 	getSortedCustomFolders,
 	getSortedSystemFolders
-} from "../MailUtils"
-import type {MailboxDetail} from "../MailModel"
+} from "../model/MailUtils"
+import type {MailboxDetail} from "../model/MailModel"
 import {locator} from "../../api/main/MainLocator"
-import {pushServiceApp} from "../../native/PushServiceApp"
+import {pushServiceApp} from "../../native/main/PushServiceApp"
 import {ActionBar} from "../../gui/base/ActionBar";
 import {MultiSelectionBar} from "../../gui/base/MultiSelectionBar"
 import type {EntityUpdateData} from "../../api/main/EventController"
@@ -66,8 +66,9 @@ import {newMailEditor, newMailEditorFromTemplate, newMailtoUrlMailEditor, writeS
 import {UserError} from "../../api/main/UserError"
 import {showUserError} from "../../misc/ErrorHandlerImpl"
 import {FolderExpander} from "../../gui/base/FolderExpander"
-import {archiveMails, isNewMailActionAvailable, moveMails, moveToInbox, promptAndDeleteMails} from "./MailGuiUtils"
+import {archiveMails, moveMails, moveToInbox, promptAndDeleteMails} from "./MailGuiUtils"
 import {getListId, isSameId} from "../../api/common/utils/EntityUtils"
+import {isNewMailActionAvailable} from "../../gui/nav/NavFunctions"
 
 assertMainOrNode()
 

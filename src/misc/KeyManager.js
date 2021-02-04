@@ -1,6 +1,6 @@
 //@flow
 import m from "mithril"
-import {assertMainOrNodeBoot} from "../api/Env"
+import {assertMainOrNodeBoot} from "../api/common/Env"
 import {ButtonType} from "../gui/base/ButtonN"
 import {neverNull} from "../api/common/utils/Utils"
 import {addAll, removeAll} from "../api/common/utils/ArrayUtils"

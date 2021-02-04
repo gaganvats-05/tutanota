@@ -3,7 +3,6 @@ import m from "mithril"
 import {MessageBoxN} from "../../gui/base/MessageBoxN"
 import {px, size} from "../../gui/size"
 import {ButtonN, ButtonType} from "../../gui/base/ButtonN"
-import {getLatestEvent, replyToEventInvitation, showEventDetails} from "../../calendar/CalendarInvites"
 import type {CalendarAttendeeStatusEnum, CalendarMethodEnum} from "../../api/common/TutanotaConstants"
 import {CalendarAttendeeStatus, CalendarMethod, ReplyType} from "../../api/common/TutanotaConstants"
 import {lang} from "../../misc/LanguageViewModel"
@@ -54,7 +53,7 @@ export class EventBanner implements MComponent<Attrs> {
 						if (logins.getUserController().isFreeAccount()) {
 							showNotAvailableForFreeDialog(true)
 						} else {
-							showEventDetails(event, mail)
+							import("../../calendar/CalendarInvites").then(({showEventDetails}) => showEventDetails(event, mail))
 						}
 					},
 				})),
@@ -93,15 +92,19 @@ function sendResponse(event: CalendarEvent, recipient: string, status: CalendarA
 	if (logins.getUserController().isFreeAccount()) {
 		showNotAvailableForFreeDialog(true)
 	} else {
-		getLatestEvent(event).then(latestEvent => {
-			const ownAttendee = latestEvent.attendees.find((a) => a.address.address === recipient)
-			if (ownAttendee == null) {
-				Dialog.error("attendeeNotFound_msg")
-				return
-			}
-			replyToEventInvitation(latestEvent, ownAttendee, status, previousMail)
-				.then(() => ownAttendee.status = status)
-				.then(m.redraw)
-		})
+		import("../../calendar/CalendarInvites")
+			.then(({getLatestEvent, replyToEventInvitation}) => {
+				return getLatestEvent(event).then(latestEvent => {
+					const ownAttendee = latestEvent.attendees.find((a) => a.address.address === recipient)
+					if (ownAttendee == null) {
+						Dialog.error("attendeeNotFound_msg")
+						return
+					}
+					replyToEventInvitation(latestEvent, ownAttendee, status, previousMail)
+						.then(() => ownAttendee.status = status)
+						.then(m.redraw)
+				})
+			})
+
 	}
 }

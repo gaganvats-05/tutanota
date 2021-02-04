@@ -1,7 +1,7 @@
 //@flow
 import type {NotificationMailTemplate} from "../api/entities/sys/NotificationMailTemplate"
 import {createNotificationMailTemplate} from "../api/entities/sys/NotificationMailTemplate"
-import {HtmlEditor} from "../gui/base/HtmlEditor"
+import {HtmlEditor} from "../gui/editor/HtmlEditor"
 import {lang, languages} from "../misc/LanguageViewModel"
 import stream from "mithril/stream/stream.js"
 import {Dialog, DialogType} from "../gui/base/Dialog"

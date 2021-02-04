@@ -1,7 +1,7 @@
 // @flow
 import m from "mithril"
 import {lang} from "../misc/LanguageViewModel"
-import {assertMainOrNode} from "../api/Env"
+import {assertMainOrNode} from "../api/common/Env"
 import {TextField} from "../gui/base/TextField"
 import {AccountType, BookingItemFeatureType, TUTANOTA_MAIL_ADDRESS_DOMAINS} from "../api/common/TutanotaConstants"
 import {Dialog} from "../gui/base/Dialog"

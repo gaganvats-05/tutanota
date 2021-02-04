@@ -12,7 +12,7 @@ import "./gui/main-styles"
 import {InfoView} from "./gui/base/InfoView"
 import {Button} from "./gui/base/Button"
 import {header} from "./gui/base/Header"
-import {assertMainOrNodeBoot, bootFinished, isApp, isDesktop, isTutanotaDomain} from "./api/Env"
+import {assertMainOrNodeBoot, bootFinished, isApp, isDesktop, isTutanotaDomain} from "./api/common/Env"
 import {keyManager} from "./misc/KeyManager"
 import {logins} from "./api/main/LoginController"
 import {downcast, neverNull} from "./api/common/utils/Utils"
@@ -66,22 +66,7 @@ if (client.isIE()) {
 		view: () => m("", lang.get("unsupportedBrowserOverlay_msg"))
 	}, {label: "close_alt"}, []))
 } else if (isDesktop()) {
-	import("./native/NativeWrapper").then(({nativeApp}) => {
-		return nativeApp.initialized().then(() => nativeApp.invokeNative(new Request('isUpdateAvailable', [])))
-		                .then(updateInfo => {
-			                if (updateInfo) {
-				                let message = {view: () => m("", lang.get("updateAvailable_label", {"{version}": updateInfo.version}))}
-				                import("./gui/base/NotificationOverlay.js").then(module => module.show(message, {label: "postpone_action"},
-					                [
-						                {
-							                label: "installNow_action",
-							                click: () => nativeApp.invokeNative(new Request('manualUpdate', [])),
-							                type: ButtonType.Primary
-						                }
-					                ]))
-			                }
-		                })
-	})
+	import("./native/main/UpdatePrompt.js").then(({registerForUpdates}) => registerForUpdates())
 }
 
 export const state: {prefix: ?string, prefixWithoutFile: ?string} = (module.hot && module.hot.data)
@@ -137,7 +122,7 @@ let initialized = lang.init(en).then(() => {
 	const userLanguage = deviceConfig.getLanguage() && languages.find((l) => l.code === deviceConfig.getLanguage())
 	if (userLanguage) {
 		const language = {code: userLanguage.code, languageTag: languageCodeToTag(userLanguage.code)}
-		Promise.all([lang.setLanguage(language), import("./native/SystemApp")])
+		Promise.all([lang.setLanguage(language), import("./native/main/SystemApp")])
 		       .then(([_, {changeSystemLanguage}]) => changeSystemLanguage(language))
 	}
 
@@ -183,7 +168,7 @@ let initialized = lang.init(en).then(() => {
 
 	let mailViewResolver = createViewResolver(() => import("./mail/view/MailView.js")
 		.then(module => new module.MailView()))
-	let contactViewResolver = createViewResolver(() => import("./contacts/ContactView.js")
+	let contactViewResolver = createViewResolver(() => import("./contacts/view/ContactView.js")
 		.then(module => new module.ContactView()))
 	let externalLoginViewResolver = createViewResolver(() => import("./login/ExternalLoginView.js")
 		.then(module => new module.ExternalLoginView()), false)
@@ -191,7 +176,7 @@ let initialized = lang.init(en).then(() => {
 		.then(module => module.login), false)
 	let settingsViewResolver = createViewResolver(() => import("./settings/SettingsView.js")
 		.then(module => new module.SettingsView()))
-	let searchViewResolver = createViewResolver(() => import("./search/SearchView.js")
+	let searchViewResolver = createViewResolver(() => import("./search/view/SearchView.js")
 		.then(module => new module.SearchView()))
 	let contactFormViewResolver = createViewResolver(() => import("./login/ContactFormView.js")
 		.then(module => module.contactFormView), false)

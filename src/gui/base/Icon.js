@@ -3,7 +3,7 @@ import m from "mithril"
 import type {BootIconsEnum} from "./icons/BootIcons"
 import {BootIcons, BootIconsSvg} from "./icons/BootIcons"
 import {theme} from "../theme"
-import {assertMainOrNodeBoot} from "../../api/Env"
+import {assertMainOrNodeBoot} from "../../api/common/Env"
 import type {IconsEnum} from "./icons/Icons"
 
 assertMainOrNodeBoot()

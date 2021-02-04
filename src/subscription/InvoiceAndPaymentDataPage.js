@@ -30,7 +30,7 @@ import {DefaultAnimationTime} from "../gui/animation/Animations"
 import type {Braintree3ds2Request} from "../api/entities/sys/Braintree3ds2Request"
 import {isUpdateForTypeRef} from "../api/main/EventController"
 import {locator} from "../api/main/MainLocator"
-import {getWebRoot} from "../api/Env"
+import {getWebRoot} from "../api/common/Env"
 import {InvoiceInfoTypeRef} from "../api/entities/sys/InvoiceInfo"
 
 /**

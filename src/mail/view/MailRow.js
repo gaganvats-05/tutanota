@@ -4,7 +4,7 @@ import {getMailFolderType, MailFolderType, ReplyType} from "../../api/common/Tut
 import {FontIcons} from "../../gui/base/icons/FontIcons";
 import type {Mail} from "../../api/entities/tutanota/Mail";
 import {formatDateTimeFromYesterdayOn} from "../../misc/Formatter";
-import {getSenderOrRecipientHeading, isTutanotaTeamMail} from "../MailUtils";
+import {getSenderOrRecipientHeading, isTutanotaTeamMail} from "../model/MailUtils";
 import {locator} from "../../api/main/MainLocator";
 import m from "mithril";
 import Badge from "../../gui/base/Badge";

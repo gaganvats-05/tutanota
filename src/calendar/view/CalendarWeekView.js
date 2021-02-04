@@ -16,7 +16,7 @@ import {
 	getTimeZone,
 	getWeekNumber,
 	layOutEvents
-} from "../CalendarUtils"
+} from "../model/CalendarUtils"
 import {CalendarDayEventsView, calendarDayTimes} from "./CalendarDayEventsView"
 import {neverNull} from "../../api/common/utils/Utils"
 import {isAllDayEvent} from "../../api/common/utils/CommonCalendarUtils"

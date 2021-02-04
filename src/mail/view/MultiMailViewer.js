@@ -1,7 +1,7 @@
 // @flow
 import m from "mithril"
 import {MailView} from "./MailView"
-import {assertMainOrNode, isDesktop, Mode} from "../../api/Env"
+import {assertMainOrNode, isDesktop, Mode} from "../../api/common/Env"
 import {ActionBar} from "../../gui/base/ActionBar"
 import ColumnEmptyMessageBox from "../../gui/base/ColumnEmptyMessageBox"
 import {lang} from "../../misc/LanguageViewModel"
@@ -12,8 +12,8 @@ import {
 	getSortedCustomFolders,
 	getSortedSystemFolders,
 	markMails
-} from "../MailUtils"
-import type {MailboxDetail} from "../MailModel"
+} from "../model/MailUtils"
+import type {MailboxDetail} from "../model/MailModel"
 import {logins} from "../../api/main/LoginController";
 import {FeatureType} from "../../api/common/TutanotaConstants";
 import type {ButtonAttrs} from "../../gui/base/ButtonN"
@@ -25,7 +25,7 @@ import {locator} from "../../api/main/MainLocator"
 import type {PosRect} from "../../gui/base/Dropdown"
 import {bundleMail, bundleMails, exportMails, moveMails, promptAndDeleteMails} from "./MailGuiUtils"
 import {attachDropdown} from "../../gui/base/DropdownN"
-import {fileApp} from "../../native/FileApp"
+import {fileApp} from "../../native/main/FileApp"
 import {showProgressDialog} from "../../gui/base/ProgressDialog"
 import {canDoDragAndDropExport} from "./MailViewer"
 

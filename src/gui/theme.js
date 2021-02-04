@@ -2,9 +2,9 @@
 import {LogoSvg} from "./base/icons/Logo"
 import {deviceConfig} from "../misc/DeviceConfig"
 import stream from "mithril/stream/stream.js"
-import {assertMainOrNodeBoot} from "../api/Env"
-import DOMPurify from "dompurify"
+import {assertMainOrNodeBoot} from "../api/common/Env"
 import {downcast} from "../api/common/utils/Utils"
+import m from "mithril"
 
 assertMainOrNodeBoot()
 
@@ -92,10 +92,15 @@ function getTheme(): Theme {
 }
 
 export function updateCustomTheme(updatedTheme: Object) {
-	if (updatedTheme.logo) {
-		updatedTheme.logo = DOMPurify.sanitize(updatedTheme.logo)
-	}
+	const logo = updatedTheme.logo
 	customTheme = Object.assign({}, defaultTheme, updatedTheme)
+	const nonNullTheme = customTheme
+	if (logo) {
+		import("dompurify").then((dompurity) => {
+			nonNullTheme.logo = dompurity.default.sanitize(logo)
+			m.redraw()
+		})
+	}
 	themeId('custom')
 }
 

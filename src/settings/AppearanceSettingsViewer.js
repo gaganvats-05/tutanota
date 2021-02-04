@@ -15,7 +15,7 @@ import {load, update} from "../api/main/Entity"
 import {isUpdateForTypeRef} from "../api/main/EventController"
 import {UserSettingsGroupRootTypeRef} from "../api/entities/tutanota/UserSettingsGroupRoot"
 import {incrementDate} from "../api/common/utils/DateUtils"
-import {changeSystemLanguage} from "../native/SystemApp"
+import {changeSystemLanguage} from "../native/main/SystemApp"
 import {getHourCycle} from "../misc/Formatter"
 import type {EntityUpdateData} from "../api/main/EventController"
 

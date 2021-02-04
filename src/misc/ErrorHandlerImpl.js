@@ -15,10 +15,10 @@ import {worker} from "../api/main/WorkerClient"
 import {TextField, Type} from "../gui/base/TextField"
 import m from "mithril"
 import {lang} from "./LanguageViewModel"
-import {assertMainOrNode, Mode} from "../api/Env"
+import {assertMainOrNode, Mode} from "../api/common/Env"
 import {AccountType, ConversationType, MailMethod} from "../api/common/TutanotaConstants"
 import {errorToString, neverNull} from "../api/common/utils/Utils"
-import {createRecipientInfo} from "../mail/MailUtils"
+import {createRecipientInfo} from "../mail/model/MailUtils"
 import {logins} from "../api/main/LoginController"
 import {client} from "./ClientDetector"
 import {OutOfSyncError} from "../api/common/error/OutOfSyncError"
@@ -37,7 +37,6 @@ import {QuotaExceededError} from "../api/common/error/QuotaExceededError"
 import {copyToClipboard} from "./ClipboardUtils"
 import {px} from "../gui/size"
 import {UserError} from "../api/main/UserError"
-import {showMoreStorageNeededOrderDialog} from "../subscription/SubscriptionUtils"
 
 assertMainOrNode()
 
@@ -126,7 +125,8 @@ export function handleUncaughtError(e: Error) {
 		Dialog.error("dataExpired_msg")
 	} else if (e instanceof InsufficientStorageError) {
 		if (logins.getUserController().isGlobalAdmin()) {
-			showMoreStorageNeededOrderDialog(logins, "insufficientStorageAdmin_msg")
+			import("../subscription/SubscriptionUtils")
+				.then((utils) => utils.showMoreStorageNeededOrderDialog(logins, "insufficientStorageAdmin_msg"))
 		} else {
 			Dialog.error("insufficientStorageUser_msg")
 		}

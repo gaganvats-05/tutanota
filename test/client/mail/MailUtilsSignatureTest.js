@@ -1,6 +1,6 @@
 //@flow
 import o from "ospec"
-import {appendEmailSignature, LINE_BREAK, prependEmailSignature} from "../../../src/mail/MailUtils"
+import {appendEmailSignature, LINE_BREAK, prependEmailSignature} from "../../../src/mail/model/MailUtils"
 import type {EmailSignatureTypeEnum} from "../../../src/api/common/TutanotaConstants"
 import {EmailSignatureType} from "../../../src/api/common/TutanotaConstants"
 import {downcast} from "../../../src/api/common/utils/Utils"

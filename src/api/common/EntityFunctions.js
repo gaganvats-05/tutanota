@@ -7,9 +7,10 @@ import sysModelMap from "../entities/sys/sysModelMap"
 import tutanotaModelMap from "../entities/tutanota/tutanotaModelMap"
 import monitorModelMap from "../entities/monitor/monitorModelMap"
 import type {ListElement} from "./utils/EntityUtils"
-import {customIdToString, firstBiggerThanSecond, getElementId, LOAD_MULTIPLE_LIMIT, TypeRef} from "./utils/EntityUtils"
+import {customIdToString, firstBiggerThanSecond, getElementId, LOAD_MULTIPLE_LIMIT} from "./utils/EntityUtils"
 import accountingModelMap from "../entities/accounting/accountingModelMap"
 import baseModelMap from "../entities/base/baseModelMap"
+import {TypeRef} from "./utils/TypeRef";
 
 
 export const HttpMethod = Object.freeze({

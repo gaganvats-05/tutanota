@@ -3,6 +3,8 @@
 import {stringToUtf8Uint8Array} from "./utils/Encoding"
 import {errorToString} from "./utils/Utils"
 
+//assertMainOrNodeBoot()
+
 export const LOG_SIZE = 1000
 
 export class Logger {

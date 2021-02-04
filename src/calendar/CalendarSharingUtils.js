@@ -1,8 +1,8 @@
 //@flow
 import type {Recipients} from "../mail/editor/SendMailModel"
 import {defaultSendMailModel} from "../mail/editor/SendMailModel"
-import {getDefaultSender, getEnabledMailAddresses} from "../mail/MailUtils"
-import {getCalendarName} from "./CalendarUtils"
+import {getDefaultSender, getEnabledMailAddresses} from "../mail/model/MailUtils"
+import {getCalendarName} from "./model/CalendarUtils"
 import type {TranslationKey} from "../misc/LanguageViewModel"
 import {lang} from "../misc/LanguageViewModel"
 import {load, loadAll} from "../api/main/Entity"

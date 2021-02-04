@@ -8,7 +8,7 @@ import {Icons} from "../../gui/base/icons/Icons"
 import {memoized} from "../../api/common/utils/Utils"
 import {htmlSanitizer} from "../../misc/HtmlSanitizer"
 import {iconForAttendeeStatus} from "./CalendarEventEditDialog"
-import {formatEventDuration, getTimeZone} from "../CalendarUtils"
+import {formatEventDuration, getTimeZone} from "../model/CalendarUtils"
 import {attendeeStatusByCode} from "../../api/common/TutanotaConstants"
 
 export type Attrs = {

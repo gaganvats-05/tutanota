@@ -1,5 +1,9 @@
 // @flow
 
+import {assertMainOrNodeBoot} from "../Env"
+
+//assertMainOrNodeBoot()
+
 /**
  * Returns a string which contains the given number padded with 0s.
  * @param num The number to pad.

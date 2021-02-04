@@ -1,8 +1,8 @@
 //@flow
 import m from "mithril"
 import {px} from "../size"
-import {assertMainOrNodeBoot} from "../../api/Env"
-import {AriaLandmarks, landmarkAttrs} from "../../api/common/utils/AriaUtils"
+import {assertMainOrNodeBoot} from "../../api/common/Env"
+import {AriaLandmarks, landmarkAttrs} from "../AriaUtils"
 
 assertMainOrNodeBoot()
 

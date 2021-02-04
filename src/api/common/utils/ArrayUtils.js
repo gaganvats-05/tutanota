@@ -2,6 +2,9 @@
 
 import {identity, neverNull} from "./Utils"
 import {getFromMap} from "./MapUtils"
+import {assertMainOrNodeBoot} from "../Env"
+
+//assertMainOrNodeBoot()
 
 export function concat(...arrays: Uint8Array[]): Uint8Array {
 	let length = arrays.reduce((previous, current) => previous + current.length, 0)

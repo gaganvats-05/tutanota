@@ -18,7 +18,7 @@ import {
 	getTimeZone,
 	getWeekNumber,
 	layOutEvents
-} from "../CalendarUtils"
+} from "../model/CalendarUtils"
 import {getDateIndicator, incrementDate} from "../../api/common/utils/DateUtils"
 import {lastThrow} from "../../api/common/utils/ArrayUtils"
 import {theme} from "../../gui/theme"
@@ -32,7 +32,7 @@ import {Icon} from "../../gui/base/Icon"
 import {Icons} from "../../gui/base/icons/Icons"
 import {PageView} from "../../gui/base/PageView"
 import type {CalendarEvent} from "../../api/entities/tutanota/CalendarEvent"
-import type {CalendarDay} from "../CalendarUtils"
+import type {CalendarDay} from "../model/CalendarUtils"
 
 type CalendarMonthAttrs = {
 	selectedDate: Date,

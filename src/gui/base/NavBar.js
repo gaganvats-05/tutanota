@@ -1,10 +1,10 @@
 // @flow
 import m from "mithril"
 import {windowFacade} from "../../misc/WindowFacade"
-import {assertMainOrNodeBoot} from "../../api/Env"
+import {assertMainOrNodeBoot} from "../../api/common/Env"
 import type {NavButtonAttrs} from "./NavButtonN"
 import {NavButtonColors, NavButtonN} from "./NavButtonN"
-import {AriaLandmarks, landmarkAttrs} from "../../api/common/utils/AriaUtils"
+import {AriaLandmarks, landmarkAttrs} from "../AriaUtils"
 
 
 assertMainOrNodeBoot()

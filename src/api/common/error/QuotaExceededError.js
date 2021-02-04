@@ -1,6 +1,9 @@
 //@flow
 
 import {DbError} from "./DbError"
+import {assertMainOrNodeBoot} from "../Env"
+
+//assertMainOrNodeBoot()
 
 /**
  * Error used to indicate that there's insufficient space on the device.

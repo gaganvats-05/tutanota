@@ -1,6 +1,6 @@
 // @flow
 import m from "mithril"
-import {assertMainOrNodeBoot, isApp, isIOSApp, Mode} from "../api/Env"
+import {assertMainOrNodeBoot, isApp, isIOSApp, Mode} from "../api/common/Env"
 import {lang} from "./LanguageViewModel"
 import type {WorkerClient} from "../api/main/WorkerClient"
 import {client} from "./ClientDetector"
@@ -34,7 +34,7 @@ class WindowFacade {
 				// load async to reduce size of boot bundle
 				this._worker = worker
 				if (env.mode === Mode.App || env.mode === Mode.Desktop || env.mode === Mode.Admin) {
-					import("../native/NativeWrapper").then(({nativeApp}) => {
+					import("../native/common/NativeWrapper").then(({nativeApp}) => {
 						return nativeApp.initialized().then(() => this.addPageInBackgroundListener())
 					})
 				}
@@ -194,7 +194,7 @@ class WindowFacade {
 				args.noAutoLogin = true
 			}
 			let newQueryString = m.buildQueryString(args)
-			import("../native/SystemApp").then(({reloadNative}) =>
+			import("../native/main/SystemApp").then(({reloadNative}) =>
 				reloadNative(newQueryString.length > 0 ? "?" + newQueryString : "")
 			)
 		} else {

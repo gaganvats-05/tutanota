@@ -1,6 +1,6 @@
 //@flow
 import m from "mithril"
-import {assertMainOrNode, isAdminClient} from "../../api/Env"
+import {assertMainOrNode, isAdminClient} from "../../api/common/Env"
 import {Dialog, DialogType} from "./Dialog"
 import {DefaultAnimationTime} from "../animation/Animations"
 import type {TranslationKey} from "../../misc/LanguageViewModel"

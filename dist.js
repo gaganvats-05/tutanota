@@ -16,6 +16,8 @@ import analyze from "rollup-plugin-analyzer"
 import {fileURLToPath} from "url"
 import {buildDesktop} from "./buildSrc/DesktopBuilder.js"
 import nodeResolve from "@rollup/plugin-node-resolve"
+import graph from "./buildSrc/graph.js"
+import visualizer from "rollup-plugin-visualizer"
 
 const {babel} = pluginBabel
 let start = Date.now()
@@ -109,7 +111,7 @@ async function buildWebapp(version) {
 	const polyfillBundle = await rollup({
 		input: ["src/polyfill.js"],
 		plugins: [
-			terser(),
+			// terser(),
 			nodeResolve(),
 			commonjs(),
 			{
@@ -132,6 +134,19 @@ async function buildWebapp(version) {
 	console.log("stared bundling", measure())
 	const bundle = await rollup({
 		input: ["src/app.js", "src/api/worker/worker.js"],
+		preserveEntrySignatures: false,
+		perf: true,
+		treeshake: {
+			moduleSideEffects(id) {
+				if (id.includes("src/api/common") ||
+					id.includes("src/mail") ||
+					id.includes("src/calendar") ||
+					id.includes("src/subscription")
+				) {
+					return false
+				}
+			},
+		},
 		plugins: [
 			babel({
 				plugins: [
@@ -155,7 +170,7 @@ async function buildWebapp(version) {
 			commonjs({
 				exclude: "src/**",
 			}),
-			terser(),
+			// terser(),
 			{
 				name: "analyze",
 				generateBundle(outOpts, bundle, isWrite) {
@@ -173,9 +188,9 @@ async function buildWebapp(version) {
 						}
 					}
 				},
-			}
+			},
+			visualizer(),
 		],
-		perf: true,
 	})
 	console.log("bundling timings: ")
 	for (let [k, v] of Object.entries(bundle.getTimings())) {
@@ -186,13 +201,34 @@ async function buildWebapp(version) {
 		sourcemap: true,
 		format: "system",
 		dir: "build/dist",
+		// FIXME: remove me, I prevent good optimization!re
+		hoistTransitiveImports: false,
 		manualChunks(id, {getModuleInfo, getModuleIds}) {
-			if (id.includes("api/entities")) {
+			// FIXME: additonal GUI component
+			if (getModuleInfo(id).code.includes("assertMainOrNodeBoot")) {
+				return id.includes("api/common") ? "common-min" : "boot"
+			} else if (id.includes("src/gui/base") ||
+				id.includes("src/api/main") ||
+				id.includes("src/mail/model") ||
+				id.includes("src/gui/nav") ||
+				id.includes("src/contacts/model") ||
+				id.includes("src/calendar/model") ||
+				id.includes("src/search/model") ||
+				id.includes("luxon") ||
+				id.includes("src/misc/ErrorHandlerImpl")
+			) {
+				// Things which we always need for main thread anyway, at least currently
+				return "main"
+			} else if (id.includes("api/entities")) {
 				return "entities"
 			} else if (id.includes("src/mail/view")) {
 				return "mail-view"
-			} else if (id.includes("src/native")) {
-				return "native"
+			} else if (id.includes("src/native/main")) {
+				return "native-main"
+			} else if (id.includes("src/native/worker")) {
+				return "native-worker"
+			} else if (id.includes("src/native/common")) {
+				return "native-common"
 			} else if (id.includes("src/mail/editor")) {
 				return "mail-editor"
 			} else if (id.includes("src/search")) {
@@ -211,16 +247,14 @@ async function buildWebapp(version) {
 				return "common"
 			} else if (id.includes("rollupPluginBabelHelpers") || id.includes("commonjsHelpers")) {
 				return "polyfill-helpers"
-			} else if (id.includes("src/api/Env")) {
-				return "env"
 			} else if (id.includes("src/subscription")) {
 				return "subscription"
 			} else if (id.includes("src/settings")) {
 				return "settings"
 			} else if (id.includes("src/misc")) {
 				return "misc"
-			} else if (id.includes("src/api/main")) {
-				return "api-main"
+			} else if (id.includes("src/api/worker")) {
+				return "worker" // avoid that crypto stuff is only put into native
 			} else {
 				// Put all translations into "translation-code"
 				// Almost like in Rollup example: https://rollupjs.org/guide/en/#outputmanualchunks

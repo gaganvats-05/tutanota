@@ -1,5 +1,5 @@
 //@flow
-import {parseCalendarFile} from "./CalendarImporter"
+import {parseCalendarFile} from "./export/CalendarImporter"
 import {worker} from "../api/main/WorkerClient"
 import {showCalendarEventDialog} from "./view/CalendarEventEditDialog"
 import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
@@ -9,7 +9,7 @@ import type {CalendarEventAttendee} from "../api/entities/tutanota/CalendarEvent
 import type {CalendarAttendeeStatusEnum, CalendarMethodEnum} from "../api/common/TutanotaConstants"
 import {CalendarMethod, getAsEnumValue} from "../api/common/TutanotaConstants"
 import {assertNotNull, clone} from "../api/common/utils/Utils"
-import {filterInt, findPrivateCalendar, getTimeZone} from "./CalendarUtils"
+import {filterInt, findPrivateCalendar, getTimeZone} from "./model/CalendarUtils"
 import {logins} from "../api/main/LoginController"
 import {SendMailModel} from "../mail/editor/SendMailModel"
 import type {Mail} from "../api/entities/tutanota/Mail"

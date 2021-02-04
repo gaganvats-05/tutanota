@@ -1,6 +1,6 @@
 // @flow
 import m from "mithril"
-import {assertMainOrNode} from "../api/Env"
+import {assertMainOrNode} from "../api/common/Env"
 import {worker} from "../api/main/WorkerClient"
 import {animations, opacity} from "../gui/animation/Animations"
 import {NotFoundError} from "../api/common/error/RestError"

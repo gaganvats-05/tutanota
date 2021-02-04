@@ -1,6 +1,9 @@
 //@flow
 
 import {downcast} from "../api/common/utils/Utils"
+import {assertMainOrNodeBoot} from "../api/common/Env"
+
+assertMainOrNodeBoot()
 
 export function applySafeAreaInsetMarginLR(element: HTMLElement) {
 	element.style.marginRight = 'env(safe-area-inset-right)'

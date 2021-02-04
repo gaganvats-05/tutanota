@@ -51,7 +51,7 @@ import {
 	HttpMethod,
 	MediaType
 } from "../../common/EntityFunctions"
-import {assertWorkerOrNode, isAdminClient, isTest} from "../../Env"
+import {assertWorkerOrNode, isAdminClient, isTest} from "../../common/Env"
 import {hash} from "../crypto/Sha256"
 import {createChangePasswordData} from "../../entities/sys/ChangePasswordData"
 import {EventBusClient} from "../EventBusClient"
@@ -85,7 +85,8 @@ import {createTakeOverDeletedAddressData} from "../../entities/sys/TakeOverDelet
 import type {WebsocketLeaderStatus} from "../../entities/sys/WebsocketLeaderStatus"
 import {createWebsocketLeaderStatus} from "../../entities/sys/WebsocketLeaderStatus"
 import {createEntropyData} from "../../entities/tutanota/EntropyData"
-import {GENERATED_ID_BYTES_LENGTH, isSameId, isSameTypeRefByAttr} from "../../common/utils/EntityUtils";
+import {GENERATED_ID_BYTES_LENGTH, isSameId} from "../../common/utils/EntityUtils";
+import {isSameTypeRefByAttr} from "../../common/utils/TypeRef";
 
 assertWorkerOrNode()
 

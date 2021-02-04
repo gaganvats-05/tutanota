@@ -1,9 +1,9 @@
 //@flow
 import {lang} from "../misc/LanguageViewModel"
-import {makeInvitationCalendarFile} from "./CalendarImporter"
+import {makeInvitationCalendarFile} from "./export/CalendarImporter"
 import type {CalendarAttendeeStatusEnum, MailMethodEnum} from "../api/common/TutanotaConstants"
 import {CalendarMethod, ConversationType, getAttendeeStatus, MailMethod, mailMethodToCalendarMethod} from "../api/common/TutanotaConstants"
-import {calendarAttendeeStatusSymbol, formatEventDuration, getTimeZone} from "./CalendarUtils"
+import {calendarAttendeeStatusSymbol, formatEventDuration, getTimeZone} from "./model/CalendarUtils"
 import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
 import {stringToUtf8Uint8Array, uint8ArrayToBase64} from "../api/common/utils/Encoding"
 import {defaultTheme} from "../gui/theme"

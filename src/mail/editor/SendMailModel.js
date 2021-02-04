@@ -12,7 +12,7 @@ import {
 	TooManyRequestsError
 } from "../../api/common/error/RestError"
 import {UserError} from "../../api/main/UserError"
-import {assertMainOrNode} from "../../api/Env"
+import {assertMainOrNode} from "../../api/common/Env"
 import {getPasswordStrengthForUser, isSecurePassword, PASSWORD_MIN_SECURE_VALUE} from "../../misc/PasswordUtils"
 import {downcast, neverNull} from "../../api/common/utils/Utils"
 import {
@@ -23,7 +23,7 @@ import {
 	getTemplateLanguages,
 	resolveRecipientInfo,
 	resolveRecipientInfoContact
-} from "../MailUtils"
+} from "../model/MailUtils"
 import type {File as TutanotaFile} from "../../api/entities/tutanota/File"
 import {FileTypeRef} from "../../api/entities/tutanota/File"
 import {ConversationEntryTypeRef} from "../../api/entities/tutanota/ConversationEntry"
@@ -35,8 +35,8 @@ import {FileNotFoundError} from "../../api/common/error/FileNotFoundError"
 import type {LoginController} from "../../api/main/LoginController"
 import {logins} from "../../api/main/LoginController"
 import type {MailAddress} from "../../api/entities/tutanota/MailAddress"
-import type {MailboxDetail} from "../MailModel"
-import type {MailModel} from "../MailModel"
+import type {MailboxDetail} from "../model/MailModel"
+import type {MailModel} from "../model/MailModel"
 import {RecipientNotResolvedError} from "../../api/common/error/RecipientNotResolvedError"
 import stream from "mithril/stream/stream.js"
 import type {EntityEventsListener, EntityUpdateData} from "../../api/main/EventController"
@@ -45,7 +45,7 @@ import {isMailAddress} from "../../misc/FormatValidator"
 import {createApprovalMail} from "../../api/entities/monitor/ApprovalMail"
 import type {EncryptedMailAddress} from "../../api/entities/tutanota/EncryptedMailAddress"
 import {deduplicate, remove} from "../../api/common/utils/ArrayUtils"
-import type {ContactModel} from "../../contacts/ContactModel"
+import type {ContactModel} from "../../contacts/model/ContactModel"
 import type {Language, TranslationKey} from "../../misc/LanguageViewModel"
 import {_getSubstitutedLanguageCode, getAvailableLanguageCode, lang, languages} from "../../misc/LanguageViewModel"
 import type {IUserController} from "../../api/main/UserController"
@@ -58,7 +58,7 @@ import {EntityClient} from "../../api/common/EntityClient"
 import {locator} from "../../api/main/MainLocator"
 import {getFromMap} from "../../api/common/utils/MapUtils"
 import {CancelledError} from "../../api/common/error/CancelledError"
-import {getContactDisplayName} from "../../contacts/ContactUtils"
+import {getContactDisplayName} from "../../contacts/model/ContactUtils"
 import {getListId, isSameId, stringToCustomId} from "../../api/common/utils/EntityUtils";
 
 assertMainOrNode()

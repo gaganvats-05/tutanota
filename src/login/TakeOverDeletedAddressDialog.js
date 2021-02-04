@@ -13,8 +13,8 @@ import {isMailAddress} from "../misc/FormatValidator"
 import {lang} from "../misc/LanguageViewModel"
 import {TextFieldN} from "../gui/base/TextFieldN"
 import {Dialog, DialogType} from "../gui/base/Dialog"
-import {assertMainOrNode} from "../api/Env"
-import {HtmlEditor, Mode} from "../gui/base/HtmlEditor"
+import {assertMainOrNode} from "../api/common/Env"
+import {HtmlEditor, Mode} from "../gui/editor/HtmlEditor"
 import {worker} from "../api/main/WorkerClient"
 
 assertMainOrNode()

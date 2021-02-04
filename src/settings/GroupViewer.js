@@ -1,6 +1,6 @@
 // @flow
 import m from "mithril"
-import {assertMainOrNode} from "../api/Env"
+import {assertMainOrNode} from "../api/common/Env"
 import {TextField} from "../gui/base/TextField"
 import {Button} from "../gui/base/Button"
 import {Dialog} from "../gui/base/Dialog"

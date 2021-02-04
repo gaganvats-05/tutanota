@@ -1,6 +1,7 @@
 // @flow
 import {CryptoError} from "../error/CryptoError"
 import {pad} from "./StringUtils"
+import {assertMainOrNodeBoot} from "../Env"
 
 // TODO rename methods according to their JAVA counterparts (e.g. Uint8Array == bytes, Utf8Uint8Array == bytes...)
 

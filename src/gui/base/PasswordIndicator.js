@@ -1,9 +1,6 @@
 // @flow
 import m from "mithril"
-import {assertMainOrNodeBoot} from "../../api/Env"
 import {scaleToVisualPasswordStrength} from "../../misc/PasswordUtils"
-
-assertMainOrNodeBoot()
 
 export class PasswordIndicator {
 	view: Function;

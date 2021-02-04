@@ -2,24 +2,14 @@
 import m from "mithril"
 import stream from "mithril/stream/stream.js"
 
-import {Editor} from "../../gui/base/Editor"
+import {Editor} from "../../gui/editor/Editor"
 import type {Attachment, Recipients, ResponseMailParameters} from "./SendMailModel"
 import {defaultSendMailModel, mailAddressToRecipient, SendMailModel} from "./SendMailModel"
 import {Dialog} from "../../gui/base/Dialog"
 import {lang} from "../../misc/LanguageViewModel"
-import type {MailboxDetail} from "../MailModel"
+import type {MailboxDetail} from "../model/MailModel"
 import {checkApprovalStatus} from "../../misc/LoginUtils"
-import {
-	appendEmailSignature,
-	conversationTypeString,
-	createInlineImage,
-	getDefaultSignature,
-	getEnabledMailAddressesWithUser,
-	getSupportMailSignature,
-	parseMailtoUrl,
-	replaceCidsWithInlineImages,
-	replaceInlineImagesWithCids
-} from "../MailUtils"
+import {appendEmailSignature, conversationTypeString, getEnabledMailAddressesWithUser, LINE_BREAK, parseMailtoUrl} from "../model/MailUtils"
 import {PermissionError} from "../../api/common/error/PermissionError"
 import {locator} from "../../api/main/MainLocator"
 import {logins} from "../../api/main/LoginController"
@@ -31,7 +21,7 @@ import {ButtonN, ButtonType} from "../../gui/base/ButtonN"
 import {attachDropdown, createDropdown} from "../../gui/base/DropdownN"
 import {fileController} from "../../file/FileController"
 import {RichTextToolbar} from "../../gui/base/RichTextToolbar"
-import {isApp, isBrowser, isDesktop} from "../../api/Env"
+import {isApp, isBrowser, isDesktop} from "../../api/common/Env"
 import {Icons} from "../../gui/base/icons/Icons"
 import {RecipientInfoType} from "../../api/common/RecipientInfo"
 import {animations, height, opacity} from "../../gui/animation/Animations"
@@ -60,6 +50,9 @@ import {downcast, noOp} from "../../api/common/utils/Utils"
 import {showUpgradeWizard} from "../../subscription/UpgradeSubscriptionWizard"
 import {showUserError} from "../../misc/ErrorHandlerImpl"
 import {formatPrice} from "../../subscription/PriceUtils"
+import {createInlineImage, replaceCidsWithInlineImages, replaceInlineImagesWithCids} from "../view/MailGuiUtils";
+import {client} from "../../misc/ClientDetector"
+import {getTimeZone} from "../../calendar/model/CalendarUtils"
 
 export type MailEditorAttrs = {
 	model: SendMailModel,
@@ -580,6 +573,14 @@ export function newMailEditorFromTemplate(
 		.then(model => createMailEditorDialog(model))
 }
 
+
+export function getSupportMailSignature(): string {
+	return LINE_BREAK + LINE_BREAK + "--"
+		+ `<br>Client: ${client.getIdentifier()}`
+		+ `<br>Tutanota version: ${env.versionNumber}`
+		+ `<br>Time zone: ${getTimeZone()}`
+		+ `<br>User agent:<br> ${navigator.userAgent}`
+}
 
 /**
  * Create and show a new mail editor with a support query, addressed to premium support,

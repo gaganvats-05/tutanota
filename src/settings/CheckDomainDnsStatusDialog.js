@@ -1,7 +1,7 @@
 // @flow
 import m from "mithril"
 import {lang} from "../misc/LanguageViewModel"
-import {assertMainOrNode} from "../api/Env"
+import {assertMainOrNode} from "../api/common/Env"
 import {Dialog, DialogType} from "../gui/base/Dialog"
 import {CustomDomainCheckResult, DnsRecordType} from "../api/common/TutanotaConstants"
 import {showProgressDialog} from "../gui/base/ProgressDialog"

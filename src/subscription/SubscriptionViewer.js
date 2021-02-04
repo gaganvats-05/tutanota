@@ -1,6 +1,6 @@
 // @flow
 import m from "mithril"
-import {assertMainOrNode, isApp} from "../api/Env"
+import {assertMainOrNode, isApp} from "../api/common/Env"
 import type {AccountTypeEnum} from "../api/common/TutanotaConstants"
 import {AccountType, AccountTypeNames, BookingItemFeatureType, Const, OperationType} from "../api/common/TutanotaConstants"
 import type {Customer} from "../api/entities/sys/Customer"

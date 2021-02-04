@@ -1,12 +1,12 @@
 //@flow
-import {assertMainOrNodeBoot, isApp, isDesktop, isTutanotaDomain} from "../api/Env"
+import {assertMainOrNodeBoot, isApp, isDesktop, isTutanotaDomain} from "../api/common/Env"
 import * as notificationOverlay from "../gui/base/NotificationOverlay"
 import {lang} from "../misc/LanguageViewModel"
 import {windowFacade} from "../misc/WindowFacade"
 import {ButtonType} from "../gui/base/ButtonN"
 import m from "mithril"
 import {handleUncaughtError} from "../misc/ErrorHandler"
-import {objToError} from "../api/common/WorkerProtocol"
+import {objToError} from "../api/common/utils/Utils";
 
 assertMainOrNodeBoot()
 

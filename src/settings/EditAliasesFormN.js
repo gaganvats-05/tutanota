@@ -1,6 +1,6 @@
 // @flow
 import m from "mithril"
-import {assertMainOrNode} from "../api/Env"
+import {assertMainOrNode} from "../api/common/Env"
 import {Dialog} from "../gui/base/Dialog"
 import type {TableAttrs, TableLineAttrs} from "../gui/base/TableN"
 import {ColumnWidth, TableN} from "../gui/base/TableN"

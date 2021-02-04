@@ -14,7 +14,7 @@ import {
 	getStartOfDayWithZone,
 	getTimeZone,
 	hasAlarmsForTheUser
-} from "../CalendarUtils"
+} from "../model/CalendarUtils"
 import {isAllDayEvent} from "../../api/common/utils/CommonCalendarUtils"
 import {neverNull} from "../../api/common/utils/Utils"
 import {px, size} from "../../gui/size"

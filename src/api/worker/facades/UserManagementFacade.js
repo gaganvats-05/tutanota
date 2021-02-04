@@ -1,5 +1,5 @@
 // @flow
-import {assertWorkerOrNode} from "../../Env"
+import {assertWorkerOrNode} from "../../common/Env"
 import type {GroupTypeEnum} from "../../common/TutanotaConstants"
 import {AccountType, Const, GroupType} from "../../common/TutanotaConstants"
 import {load, serviceRequest, serviceRequestVoid} from "../EntityWorker"

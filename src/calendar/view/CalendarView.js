@@ -22,7 +22,7 @@ import {isUpdateForTypeRef} from "../../api/main/EventController"
 import {defaultCalendarColor, Keys, OperationType, reverse, ShareCapability, TimeFormat} from "../../api/common/TutanotaConstants"
 import {locator} from "../../api/main/MainLocator"
 import {downcast, freezeMap, memoized, neverNull, noOp} from "../../api/common/utils/Utils"
-import type {CalendarMonthTimeRange} from "../CalendarUtils"
+import type {CalendarMonthTimeRange} from "../model/CalendarUtils"
 import {
 	addDaysForEvent,
 	addDaysForLongEvent,
@@ -39,7 +39,7 @@ import {
 	hasCapabilityOnGroup,
 	isSameEvent,
 	shouldDefaultToAmPmTimeFormat,
-} from "../CalendarUtils"
+} from "../model/CalendarUtils"
 import {showCalendarEventDialog} from "./CalendarEventEditDialog"
 import {worker} from "../../api/main/WorkerClient"
 import type {ButtonAttrs} from "../../gui/base/ButtonN"
@@ -66,14 +66,14 @@ import {createCalendarDeleteData} from "../../api/entities/tutanota/CalendarDele
 import {styles} from "../../gui/styles"
 import {CalendarWeekView} from "./CalendarWeekView"
 import {Dialog} from "../../gui/base/Dialog"
-import {isApp} from "../../api/Env"
+import {isApp} from "../../api/common/Env"
 import {showCalendarSharingDialog} from "../CalendarSharingDialog"
 import type {ReceivedGroupInvitation} from "../../api/entities/sys/ReceivedGroupInvitation"
 import {ReceivedGroupInvitationTypeRef} from "../../api/entities/sys/ReceivedGroupInvitation"
 import type {Group} from "../../api/entities/sys/Group"
 import type {UserSettingsGroupRoot} from "../../api/entities/tutanota/UserSettingsGroupRoot"
 import {UserSettingsGroupRootTypeRef} from "../../api/entities/tutanota/UserSettingsGroupRoot"
-import {getDisplayText} from "../../mail/MailUtils"
+import {getDisplayText} from "../../mail/model/MailUtils"
 import {UserGroupRootTypeRef} from "../../api/entities/sys/UserGroupRoot"
 import {showInvitationDialog} from "../CalendarInvitationDialog"
 import {loadGroupMembers} from "../CalendarSharingUtils"
@@ -85,7 +85,7 @@ import {LazyLoaded} from "../../api/common/utils/LazyLoaded"
 import {CalendarEventPopup} from "./CalendarEventPopup"
 import {NoopProgressMonitor} from "../../api/common/utils/ProgressMonitor"
 import {getListId, isSameId, listIdPart} from "../../api/common/utils/EntityUtils";
-import {exportCalendar, showCalendarImportDialog} from "../CalendarImporterDialog"
+import {exportCalendar, showCalendarImportDialog} from "../export/CalendarImporterDialog"
 import {showNotAvailableForFreeDialog} from "../../subscription/SubscriptionUtils"
 
 export const LIMIT_PAST_EVENTS_YEARS = 100

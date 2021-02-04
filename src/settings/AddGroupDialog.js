@@ -1,6 +1,6 @@
 // @flow
 import m from "mithril"
-import {assertMainOrNode} from "../api/Env"
+import {assertMainOrNode} from "../api/common/Env"
 import {TextField} from "../gui/base/TextField"
 import type {GroupTypeEnum} from "../api/common/TutanotaConstants"
 import {BookingItemFeatureType, FeatureType, GroupType} from "../api/common/TutanotaConstants"

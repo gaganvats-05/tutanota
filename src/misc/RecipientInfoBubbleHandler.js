@@ -6,12 +6,12 @@ import {DbError} from "../api/common/error/DbError"
 import {loadAll} from "../api/main/Entity"
 import type {Contact} from "../api/entities/tutanota/Contact"
 import {ContactTypeRef} from "../api/entities/tutanota/Contact"
-import {Mode} from "../api/Env"
-import {findRecipients} from "../native/ContactApp"
+import {Mode} from "../api/common/Env"
+import {findRecipients} from "../native/main/ContactApp"
 import {stringToNameAndMailAddress} from "./Formatter"
 import {ContactSuggestion, ContactSuggestionHeight} from "./ContactSuggestion"
 import type {RecipientInfo} from "../api/common/RecipientInfo"
-import type {ContactModel} from "../contacts/ContactModel"
+import type {ContactModel} from "../contacts/model/ContactModel"
 
 export type RecipientInfoBubble = Bubble<RecipientInfo>
 

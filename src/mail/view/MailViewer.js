@@ -1,5 +1,5 @@
 // @flow
-import {px, size} from "../../gui/size"
+import {size} from "../../gui/size"
 import m from "mithril"
 import stream from "mithril/stream/stream.js"
 import {ExpanderButtonN, ExpanderPanelN} from "../../gui/base/Expander"
@@ -10,7 +10,7 @@ import {windowFacade} from "../../misc/WindowFacade"
 import {ease} from "../../gui/animation/Easing"
 import type {DomMutation} from "../../gui/animation/Animations"
 import {animations, scroll} from "../../gui/animation/Animations"
-import {nativeApp} from "../../native/NativeWrapper"
+import {nativeApp} from "../../native/common/NativeWrapper"
 import type {MailBody} from "../../api/entities/tutanota/MailBody"
 import {MailBodyTypeRef} from "../../api/entities/tutanota/MailBody"
 import type {CalendarMethodEnum, InboxRuleTypeEnum, MailReportTypeEnum} from "../../api/common/TutanotaConstants"
@@ -35,7 +35,7 @@ import type {File as TutanotaFile} from "../../api/entities/tutanota/File"
 import {FileTypeRef} from "../../api/entities/tutanota/File"
 import {fileController} from "../../file/FileController"
 import {lang} from "../../misc/LanguageViewModel"
-import {assertMainOrNode, isAndroidApp, isDesktop, isIOSApp} from "../../api/Env"
+import {assertMainOrNode, isAndroidApp, isDesktop, isIOSApp} from "../../api/common/Env"
 import {htmlSanitizer, stringifyFragment} from "../../misc/HtmlSanitizer"
 import {Dialog} from "../../gui/base/Dialog"
 import type {DeferredObject} from "../../api/common/utils/Utils"
@@ -45,12 +45,12 @@ import {startsWith} from "../../api/common/utils/StringUtils"
 import {Request} from "../../api/common/WorkerProtocol.js"
 import {ConversationEntryTypeRef} from "../../api/entities/tutanota/ConversationEntry"
 import {
-	prependEmailSignature,
 	createNewContact,
 	getArchiveFolder,
 	getDefaultSender,
 	getDisplayText,
 	getEnabledMailAddresses,
+	getFolder,
 	getFolderIcon,
 	getFolderName,
 	getMailboxName,
@@ -60,9 +60,8 @@ import {
 	getSortedSystemFolders,
 	isExcludedMailAddress,
 	isTutanotaTeamMail,
-	replaceCidsWithInlineImages,
-	getFolder,
-} from "../MailUtils"
+	prependEmailSignature,
+} from "../model/MailUtils"
 import {ContactEditor} from "../../contacts/ContactEditor"
 import ColumnEmptyMessageBox from "../../gui/base/ColumnEmptyMessageBox"
 import type {KeyPress} from "../../misc/KeyManager"
@@ -87,7 +86,7 @@ import {TutanotaService} from "../../api/entities/tutanota/Services"
 import {HttpMethod} from "../../api/common/EntityFunctions"
 import {createListUnsubscribeData} from "../../api/entities/tutanota/ListUnsubscribeData"
 import {MailHeadersTypeRef} from "../../api/entities/tutanota/MailHeaders"
-import {mailToEmlFile} from "../Exporter"
+import {mailToEmlFile} from "../export/Exporter"
 import {client} from "../../misc/ClientDetector"
 import type {PosRect} from "../../gui/base/Dropdown"
 import {createAsyncDropDownButton, createDropDownButton, DomRectReadOnlyPolyfilled} from "../../gui/base/Dropdown"
@@ -99,7 +98,7 @@ import type {ButtonAttrs, ButtonColorEnum} from "../../gui/base/ButtonN"
 import {ButtonColors, ButtonN, ButtonType} from "../../gui/base/ButtonN"
 import {styles} from "../../gui/styles"
 import {worker} from "../../api/main/WorkerClient"
-import {CALENDAR_MIME_TYPE} from "../../calendar/CalendarUtils"
+import {CALENDAR_MIME_TYPE} from "../../calendar/model/CalendarUtils"
 import {createAsyncDropdown, createDropdown} from "../../gui/base/DropdownN"
 import {navButtonRoutes} from "../../misc/RouteChange"
 import {createEmailSenderListElement} from "../../api/entities/sys/EmailSenderListElement"
@@ -113,20 +112,19 @@ import {copyToClipboard} from "../../misc/ClipboardUtils"
 import type {GroupInfo} from "../../api/entities/sys/GroupInfo"
 import {EventBanner} from "./EventBanner"
 import {checkApprovalStatus} from "../../misc/LoginUtils"
-import {getEventFromFile} from "../../calendar/CalendarInvites"
 import type {CalendarEvent} from "../../api/entities/tutanota/CalendarEvent"
 import {newMailEditorAsResponse, newMailEditorFromDraft, newMailtoUrlMailEditor} from "../editor/MailEditor"
-import type {MailboxDetail} from "../MailModel"
+import type {MailboxDetail, MailModel} from "../model/MailModel"
 import type {ResponseMailParameters} from "../editor/SendMailModel"
 import {defaultSendMailModel} from "../editor/SendMailModel"
 import {UserError} from "../../api/main/UserError"
 import {showUserError} from "../../misc/ErrorHandlerImpl"
 import {EntityClient} from "../../api/common/EntityClient"
-import {fileApp} from "../../native/FileApp"
-import {bundleMail, isNewMailActionAvailable, moveMails, promptAndDeleteMails} from "./MailGuiUtils"
-import type {MailModel} from "../MailModel"
-import type {ContactModel} from "../../contacts/ContactModel"
+import {fileApp} from "../../native/main/FileApp"
+import {bundleMail, moveMails, promptAndDeleteMails, replaceCidsWithInlineImages} from "./MailGuiUtils"
+import type {ContactModel} from "../../contacts/model/ContactModel"
 import {elementIdPart, getListId, listIdPart} from "../../api/common/utils/EntityUtils"
+import {isNewMailActionAvailable} from "../../gui/nav/NavFunctions"
 
 assertMainOrNode()
 
@@ -903,7 +901,8 @@ export class MailViewer {
 						           && mail.state === MailState.RECEIVED
 					           ) {
 						           Promise.all([
-							           getEventFromFile(calendarFile),
+							           import("../../calendar/CalendarInvites")
+								           .then(({getEventFromFile}) => getEventFromFile(calendarFile)),
 							           this._getSenderOfResponseMail()
 						           ]).then(([event, recipient]) => {
 							           this._calendarEventAttachment = event && {

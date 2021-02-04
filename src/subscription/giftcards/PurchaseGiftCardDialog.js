@@ -38,7 +38,7 @@ import {Icon} from "../../gui/base/Icon"
 import {GiftCardMessageEditorField} from "./GiftCardMessageEditorField"
 import {client} from "../../misc/ClientDetector"
 import {noOp} from "../../api/common/utils/Utils"
-import {isIOSApp} from "../../api/Env"
+import {isIOSApp} from "../../api/common/Env"
 import {formatPrice} from "../PriceUtils";
 
 export type GiftCardPurchaseViewAttrs = {

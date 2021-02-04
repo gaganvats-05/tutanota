@@ -4,20 +4,17 @@ import m from "mithril"
 import {ButtonColors, ButtonN, ButtonType} from "../base/ButtonN"
 import {BootIcons} from "../base/icons/BootIcons"
 import {LogoutUrl} from "../base/Header"
-import {showSupportDialog, showUpgradeDialog, writeInviteMail} from "./NavFunctions"
-import {isDesktop, isIOSApp} from "../../api/Env"
+import {isNewMailActionAvailable, showSupportDialog, showUpgradeDialog, writeInviteMail} from "./NavFunctions"
+import {isDesktop, isIOSApp} from "../../api/common/Env"
 import {logins} from "../../api/main/LoginController"
 import {navButtonRoutes} from "../../misc/RouteChange"
 import {getSafeAreaInsetLeft} from "../HtmlUtils"
 import {Icons} from "../base/icons/Icons"
-import {nativeApp} from "../../native/NativeWrapper"
 import {Request} from "../../api/common/WorkerProtocol"
-import {AriaLandmarks, landmarkAttrs} from "../../api/common/utils/AriaUtils"
+import {AriaLandmarks, landmarkAttrs} from "../AriaUtils"
 import {attachDropdown} from "../base/DropdownN"
 import {noOp} from "../../api/common/utils/Utils"
 import {keyManager} from "../../misc/KeyManager"
-import {showPurchaseGiftCardDialog} from "../../subscription/giftcards/PurchaseGiftCardDialog"
-import {isNewMailActionAvailable} from "../../mail/view/MailGuiUtils";
 
 type Attrs = void
 
@@ -48,7 +45,12 @@ export class DrawerMenu implements MComponent<Attrs> {
 				? m(ButtonN, {
 					icon: () => Icons.NewWindow,
 					label: "openNewWindow_action",
-					click: () => nativeApp.invokeNative(new Request('openNewWindow', [])),
+					click: () => {
+						import("../../native/common/NativeWrapper").then(({nativeApp}) => {
+							return nativeApp.invokeNative(new Request('openNewWindow', []))
+						})
+
+					},
 					type: ButtonType.ActionLarge,
 					colors: ButtonColors.DrawerNav
 				})

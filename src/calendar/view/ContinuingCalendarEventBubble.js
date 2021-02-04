@@ -1,7 +1,7 @@
 //@flow
 
 import m from "mithril"
-import {getEventText, hasAlarmsForTheUser} from "../CalendarUtils"
+import {getEventText, hasAlarmsForTheUser} from "../model/CalendarUtils"
 import type {EventTextTimeOptionEnum} from "../../api/common/TutanotaConstants"
 import {CalendarEventBubble} from "./CalendarEventBubble"
 import type {CalendarEvent} from "../../api/entities/tutanota/CalendarEvent"

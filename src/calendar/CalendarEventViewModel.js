@@ -15,9 +15,9 @@ import type {CalendarEvent} from "../api/entities/tutanota/CalendarEvent"
 import {createCalendarEvent} from "../api/entities/tutanota/CalendarEvent"
 import type {AlarmInfo} from "../api/entities/sys/AlarmInfo"
 import {createAlarmInfo} from "../api/entities/sys/AlarmInfo"
-import type {MailboxDetail} from "../mail/MailModel"
+import type {MailboxDetail} from "../mail/model/MailModel"
 import stream from "mithril/stream/stream.js"
-import {copyMailAddress, getDefaultSenderFromUser, getEnabledMailAddressesWithUser, getSenderNameForUser} from "../mail/MailUtils"
+import {copyMailAddress, getDefaultSenderFromUser, getEnabledMailAddressesWithUser, getSenderNameForUser} from "../mail/model/MailUtils"
 import {
 	createRepeatRuleWithValues,
 	generateUid,
@@ -36,10 +36,10 @@ import {
 	timeString,
 	timeStringFromParts,
 	timeStringInZone
-} from "./CalendarUtils"
+} from "./model/CalendarUtils"
 import {assertNotNull, clone, downcast, neverNull, noOp} from "../api/common/utils/Utils"
 import {generateEventElementId, isAllDayEvent} from "../api/common/utils/CommonCalendarUtils"
-import {CalendarModel} from "./CalendarModel"
+import {CalendarModel} from "./model/CalendarModel"
 import {DateTime} from "luxon"
 import type {EncryptedMailAddress} from "../api/entities/tutanota/EncryptedMailAddress"
 import {createEncryptedMailAddress} from "../api/entities/tutanota/EncryptedMailAddress"

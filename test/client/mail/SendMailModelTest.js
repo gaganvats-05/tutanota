@@ -5,10 +5,10 @@ import o from "ospec"
 import en from "../../../src/translations/en"
 import type {IUserController} from "../../../src/api/main/UserController"
 import type {LoginController} from "../../../src/api/main/LoginController"
-import type {MailboxDetail, MailModel} from "../../../src/mail/MailModel"
+import type {MailboxDetail, MailModel} from "../../../src/mail/model/MailModel"
 import type {Contact} from "../../../src/api/entities/tutanota/Contact"
 import {ContactTypeRef, createContact} from "../../../src/api/entities/tutanota/Contact"
-import type {ContactModel} from "../../../src/contacts/ContactModel"
+import type {ContactModel} from "../../../src/contacts/model/ContactModel"
 import {downcast, identity, neverNull} from "../../../src/api/common/utils/Utils"
 import type {TutanotaProperties} from "../../../src/api/entities/tutanota/TutanotaProperties"
 import {createTutanotaProperties} from "../../../src/api/entities/tutanota/TutanotaProperties"
@@ -41,10 +41,11 @@ import {locator} from "../../../src/api/main/MainLocator"
 import {CustomerAccountCreateDataTypeRef} from "../../../src/api/entities/tutanota/CustomerAccountCreateData"
 import {NotificationMailTypeRef} from "../../../src/api/entities/tutanota/NotificationMail"
 import {ChallengeTypeRef} from "../../../src/api/entities/sys/Challenge"
-import {getContactDisplayName} from "../../../src/contacts/ContactUtils"
+import {getContactDisplayName} from "../../../src/contacts/model/ContactUtils"
 import type {RecipientInfo} from "../../../src/api/common/RecipientInfo"
 import {createConversationEntry} from "../../../src/api/entities/tutanota/ConversationEntry"
-import {isSameId, isSameTypeRef, TypeRef} from "../../../src/api/common/utils/EntityUtils";
+import {isSameId} from "../../../src/api/common/utils/EntityUtils";
+import {isSameTypeRef, TypeRef} from "../../../src/api/common/utils/TypeRef";
 
 
 type TestIdGenerator = {

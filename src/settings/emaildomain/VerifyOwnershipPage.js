@@ -10,7 +10,7 @@ import {Dialog} from "../../gui/base/Dialog"
 import {getCustomMailDomains} from "../../api/common/utils/Utils"
 import type {WizardPageAttrs, WizardPageN} from "../../gui/base/WizardDialogN"
 import {emitWizardEvent, WizardEventType} from "../../gui/base/WizardDialogN"
-import {assertMainOrNode} from "../../api/Env"
+import {assertMainOrNode} from "../../api/common/Env"
 import {ButtonN, ButtonType} from "../../gui/base/ButtonN"
 
 assertMainOrNode()

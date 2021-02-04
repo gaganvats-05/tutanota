@@ -4,7 +4,7 @@ import stream from "mithril/stream/stream.js"
 import type {TranslationKey} from "../../misc/LanguageViewModel"
 import {lang} from "../../misc/LanguageViewModel"
 import {addFlash, removeFlash} from "./Flash"
-import {assertMainOrNodeBoot} from "../../api/Env"
+import {assertMainOrNodeBoot} from "../../api/common/Env"
 import {Icon} from "./Icon"
 import {BootIcons} from "./icons/BootIcons"
 
