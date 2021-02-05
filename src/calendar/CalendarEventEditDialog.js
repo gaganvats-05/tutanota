@@ -41,9 +41,7 @@ import {UserError} from "../api/common/error/UserError"
 import type {Mail} from "../api/entities/tutanota/Mail"
 import {theme} from "../gui/theme"
 import {showProgressDialog} from "../gui/base/ProgressDialog"
-import {showNotAvailableForFreeDialog} from "../subscription/SubscriptionDialogUtils"
-import {logins} from "../api/main/LoginController"
-import {showBusinessBuyDialog} from "../subscription/BuyDialog"
+import {showBusinessFeatureRequiredDialog, showNotAvailableForFreeDialog} from "../subscription/SubscriptionDialogUtils"
 import type {ContactModel} from "../contacts/ContactModel"
 import {locator} from "../api/main/MainLocator"
 
@@ -508,16 +506,14 @@ function makeBubbleTextField(viewModel: CalendarEventViewModel, contactModel: Co
 			Promise.resolve().then(() => {
 				const notAvailable = viewModel.shouldShowSendInviteNotAvailable()
 				let p = Promise.resolve()
-				if (notAvailable && !logins.getUserController().isPremiumAccount()) {
-					showNotAvailableForFreeDialog(false)
-				} else if (notAvailable) {
-					p = showBusinessBuyDialog(true).then(failed => {
-						return viewModel.updateBusinessFeature().then(() => {
-							if (!failed) {
+				if (notAvailable) {
+					p = showBusinessFeatureRequiredDialog("businessFeatureRequiredInvite_msg")
+						.then(businessFeatureOrdered => {
+							if (businessFeatureOrdered) {
 								viewModel.addGuest(bubble.entity.mailAddress, bubble.entity.contact)
 							}
+							return viewModel.updateBusinessFeature()
 						})
-					})
 				} else {
 					viewModel.addGuest(bubble.entity.mailAddress, bubble.entity.contact)
 				}

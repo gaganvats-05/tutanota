@@ -358,6 +358,7 @@ export const FeatureType = Object.freeze({
 	DisableDefaultSignature: "7",
 	HideBuyDialogs: "8",
 	DisableCalendar: "9",
+	BusinessFeatureEnabled: "10",
 })
 export type FeatureTypeEnum = $Values<typeof FeatureType>;
 export const ValueToFeatureType: {} = reverse(FeatureType)
@@ -423,7 +424,7 @@ export const InvoiceStatus = Object.freeze({
 	SECONDREMINDER: "11"
 })
 export type InvoiceStatusEnum = $Values<typeof InvoiceStatus>;
-export const ValueToInvoiceStatus: {} = reverse(FeatureType)
+export const ValueToInvoiceStatus: {} = reverse(InvoiceStatus)
 
 export const CloseEventBusOption = Object.freeze({
 	Terminate: "terminate",

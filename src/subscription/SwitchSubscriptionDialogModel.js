@@ -2,18 +2,23 @@
 
 import type {WorkerClient} from "../api/main/WorkerClient"
 import type {SubscriptionPlanPrices, SubscriptionTypeEnum} from "./SubscriptionUtils"
-import {BookingItemFeatureType} from "../api/common/TutanotaConstants"
-import {neverNull} from "../api/common/utils/Utils"
 import {
 	getIncludedAliases,
-	getIncludedStorageCapacity, getNbrOfContactForms,
-	getNbrOfUsers, getSubscriptionType,
+	getIncludedStorageCapacity,
+	getNbrOfContactForms,
+	getNbrOfUsers,
+	getSubscriptionType,
 	getTotalAliases,
-	getTotalStorageCapacity, isBusinessActive,
-	isDowngrade, isSharingActive, isWhitelabelActive,
+	getTotalStorageCapacity,
+	isBusinessFeatureActive,
+	isDowngrade,
+	isSharingActive,
+	isWhitelabelActive,
 	subscriptions,
 	SubscriptionType
 } from "./SubscriptionUtils"
+import {BookingItemFeatureType} from "../api/common/TutanotaConstants"
+import {neverNull} from "../api/common/utils/Utils"
 import type {PriceServiceReturn} from "../api/entities/sys/PriceServiceReturn"
 import type {PlanPrices} from "../api/entities/sys/PlanPrices"
 import {createPlanPrices} from "../api/entities/sys/PlanPrices"
@@ -95,7 +100,7 @@ export class SwitchSubscriptionDialogModel {
 			includedAliases: getIncludedAliases(this._customerInfo),
 			currentlyWhitelabelOrdered: isWhitelabelActive(this._lastBooking),
 			currentlySharingOrdered: isSharingActive(this._lastBooking),
-			currentlyBusinessOrdered: isBusinessActive(this._lastBooking),
+			currentlyBusinessOrdered: isBusinessFeatureActive(this._customer),
 			orderedContactForms: getNbrOfContactForms(this._lastBooking)
 		}
 	}

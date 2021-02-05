@@ -61,7 +61,7 @@ import {locator} from "../api/main/MainLocator"
 import {ProgrammingError} from "../api/common/error/ProgrammingError"
 import type {Booking} from "../api/entities/sys/Booking"
 import {BookingTypeRef} from "../api/entities/sys/Booking"
-import {isBusinessActive} from "../subscription/SubscriptionUtils"
+import {isBusinessFeatureActive} from "../subscription/SubscriptionUtils"
 import {EntityClient} from "../api/common/EntityClient"
 import {GENERATED_MAX_ID} from "../api/common/utils/EntityUtils"
 
@@ -328,11 +328,9 @@ export class CalendarEventViewModel {
 	}
 
 	updateBusinessFeature(): Promise<void> {
-		return this._userController.loadCustomerInfo()
-		           .then(customerInfo => this._entityClient.loadRange(BookingTypeRef, neverNull(customerInfo.bookings).items, GENERATED_MAX_ID, 1, true))
-		           .then(bookings => bookings.length === 1 ? bookings[0] : null)
-		           .then(lastBooking => {
-			           this._hasBusinessFeature(isBusinessActive(lastBooking))
+		return this._userController.loadCustomer()
+		           .then(customer => {
+			           this._hasBusinessFeature(isBusinessFeatureActive(customer))
 		           }).return()
 	}
 
@@ -403,9 +401,6 @@ export class CalendarEventViewModel {
 		// 4: add the attendee
 		// 5: add organizer if you are not already in the list
 
-		if (this.shouldShowSendInviteNotAvailable()) {
-			throw new ProgrammingError("Not available for free account")
-		}
 		// We don't add a guest if they are already an attendee
 		// even though the SendMailModel handles deduplication, we need to check here because recipients shouldn't be duplicated across the 3 models either
 		if (this.attendees().some((a) => a.address.address === mailAddress)) {

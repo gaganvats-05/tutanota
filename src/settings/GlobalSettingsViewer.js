@@ -46,11 +46,7 @@ import {ExpandableTable} from "./ExpandableTable"
 import {showRejectedSendersInfoDialog} from "./RejectedSendersInfoDialog"
 import {createEmailSenderListElement} from "../api/entities/sys/EmailSenderListElement"
 import {showAddDomainWizard} from "./emaildomain/AddDomainWizard"
-import {createNotAvailableForFreeClickHandler} from "../subscription/SubscriptionDialogUtils"
-import {showBusinessBuyDialog} from "../subscription/BuyDialog"
-import {BookingTypeRef} from "../api/entities/sys/Booking"
-import {isBusinessActive} from "../subscription/SubscriptionUtils"
-import {locator} from "../api/main/MainLocator"
+import {showNotAvailableForFreeDialog} from "../subscription/SubscriptionDialogUtils"
 import {GENERATED_MAX_ID, getElementId, sortCompareByReverseId} from "../api/common/utils/EntityUtils"
 import {getUserGroupMemberships} from "../api/common/utils/GroupUtils"
 
@@ -70,7 +66,6 @@ export class GlobalSettingsViewer implements UpdatableSettingsViewer {
 	_rejectedSenderLines: Stream<Array<TableLineAttrs>>;
 	_customDomainLines: Stream<Array<TableLineAttrs>>;
 	_auditLogLines: Stream<Array<TableLineAttrs>>;
-	_hasBusinessFeature: Stream<boolean>
 
 	/**
 	 * caches the current status for the custom email domains
@@ -90,7 +85,6 @@ export class GlobalSettingsViewer implements UpdatableSettingsViewer {
 		this._auditLogLines = stream([])
 		this._props = stream()
 		this._customer = stream()
-		this._hasBusinessFeature = stream(false)
 
 		let saveIpAddress = stream(false)
 		this._props.map(props => saveIpAddress(props.saveEncryptedIpAddressInSession))
@@ -147,31 +141,17 @@ export class GlobalSettingsViewer implements UpdatableSettingsViewer {
 				showActionButtonColumn: true,
 				addButtonAttrs: {
 					label: "addCustomDomain_action",
-					click: createNotAvailableForFreeClickHandler(false,
-						() => {
-							// one custom domain is included in premium, for more domains business feature is required
-							if (this._customDomainLines().length < 1 || this._hasBusinessFeature()) {
-								this._customerInfo.getAsync().then(customerInfo => {
-									showAddDomainWizard("", customerInfo).then(() => {
-										this._updateDomains()
-									})
-								})
+					click: () => {
+						this._customerInfo.getAsync().then(customerInfo => {
+							if (logins.getUserController().isFreeAccount()) {
+								showNotAvailableForFreeDialog(getCustomMailDomains(customerInfo).length === 0)
 							} else {
-								showBusinessBuyDialog(true)
+								showAddDomainWizard("", customerInfo).then(() => {
+									this._updateDomains()
+								})
 							}
-						},
-						() => logins.getUserController().isPremiumAccount()),
-					// click: () => {
-					// 	if (logins.getUserController().isFreeAccount()) {
-					// 		showNotAvailableForFreeDialog(true)
-					// 	} else {
-					// 		this._customerInfo.getAsync().then(customerInfo => {
-					// 			showAddDomainWizard("", customerInfo).then(() => {
-					// 				this._updateDomains()
-					// 			})
-					// 		})
-					// 	}
-					// },
+						})
+					},
 					icon: () => Icons.Add
 				},
 				lines: this._customDomainLines()
@@ -226,7 +206,6 @@ export class GlobalSettingsViewer implements UpdatableSettingsViewer {
 		this._updateDomains()
 		this._updateCustomerServerProperties()
 		this._updateAuditLog()
-		this._updateBusinessFeature()
 	}
 
 	_updateCustomerServerProperties(): Promise<void> {
@@ -418,18 +397,6 @@ export class GlobalSettingsViewer implements UpdatableSettingsViewer {
 		}
 	}
 
-	_updateBusinessFeature(): void {
-		logins.getUserController().loadCustomerInfo()
-		      .then(customerInfo => locator.entityClient.loadRange(BookingTypeRef, neverNull(customerInfo.bookings).items, GENERATED_MAX_ID, 1, true))
-		      .then(bookings => bookings.length === 1 ? bookings[0] : null)
-		      .then(lastBooking => {
-			      const businessActive = isBusinessActive(lastBooking)
-			      if (businessActive !== this._hasBusinessFeature()) {
-				      this._hasBusinessFeature(businessActive)
-				      m.redraw()
-			      }
-		      })
-	}
 
 	_updateDomains(): Promise<void> {
 		return this._customerInfo.getAsync().then(customerInfo => {
@@ -570,8 +537,6 @@ export class GlobalSettingsViewer implements UpdatableSettingsViewer {
 			} else if (isUpdateForTypeRef(CustomerInfoTypeRef, update) && update.operation === OperationType.UPDATE) {
 				this._customerInfo.reset()
 				return this._updateDomains()
-			} else if (isUpdateForTypeRef(BookingTypeRef, update)) {
-				this._updateBusinessFeature()
 			}
 		}).return()
 	}

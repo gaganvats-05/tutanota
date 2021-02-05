@@ -1280,6 +1280,11 @@ export type TranslationKeyType = "about_label"
 	| "upgradePlan_msg"
 	| "businessIncluded_msg"
 	| "businessCustomerAutoBusinessFeature_msg"
+	| "businessFeatureRequiredInvite_msg"
+	| "ordertItNow_msg"
+	| "contactAdmin_msg"
+	| "businessFeatureRequiredMultipleDomains_msg"
+	| "businessFeatureRequiredGeneral_msg"
 // TODO check unused keys
 // TODO delete:
 // upgradePro_msg

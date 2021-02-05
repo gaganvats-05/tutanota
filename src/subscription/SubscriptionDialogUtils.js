@@ -11,8 +11,13 @@ import {lang} from "../misc/LanguageViewModel"
 import {showUpgradeWizard} from "./UpgradeSubscriptionWizard"
 import {formatPrice} from "./PriceUtils"
 import * as StorageCapacityOptionsDialog from "./StorageCapacityOptionsDialog";
+import {showBusinessBuyDialog} from "./BuyDialog"
 
-export function showNotAvailableForFreeDialog(isInPremiumIncluded: boolean) {
+/**
+ * Opens a dialog which states that the function is not available in the Free subscription and provides an option to upgrade.
+ * @param isInPremiumIncluded Whether the feature is included in the premium membership or not.
+ */
+export function showNotAvailableForFreeDialog(isInPremiumIncluded: boolean): void {
 	if (isIOSApp()) {
 		Dialog.error("notAvailableInApp_msg")
 	} else {
@@ -65,4 +70,31 @@ export function showMoreStorageNeededOrderDialog(loginController: LoginControlle
 			}
 		}
 	})
+}
+
+/**
+ * @returns true if the business feature has been ordered
+ */
+export function showBusinessFeatureRequiredDialog(reason: TranslationKey | lazy<string>): Promise<boolean> {
+	if (logins.getUserController().isFreeAccount()) {
+		showNotAvailableForFreeDialog(false)
+		return Promise.resolve(false)
+	} else {
+		if (logins.getUserController().isGlobalAdmin()) {
+			return Dialog.confirm(() => lang.getMaybeLazy(reason) + " " + lang.get("ordertItNow_msg"))
+			             .then(confirmed => {
+				             if (confirmed) {
+					             return showBusinessBuyDialog(true).then(failed => {
+						             return !failed
+					             })
+				             } else {
+					             return false
+				             }
+			             })
+
+		} else {
+			return Dialog.error(() => lang.getMaybeLazy(reason) + " " + lang.get("contactAdmin_msg"))
+			             .then(() => false)
+		}
+	}
 }

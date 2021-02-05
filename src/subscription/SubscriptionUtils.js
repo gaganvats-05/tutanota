@@ -3,7 +3,7 @@ import m from "mithril"
 import type {TranslationKey} from "../misc/LanguageViewModel"
 import {lang} from "../misc/LanguageViewModel"
 import type {BookingItemFeatureTypeEnum} from "../api/common/TutanotaConstants"
-import {AccountType, BookingItemFeatureType, Const} from "../api/common/TutanotaConstants"
+import {AccountType, BookingItemFeatureType, Const, FeatureType} from "../api/common/TutanotaConstants"
 import {getCurrentCount} from "./PriceUtils"
 import {PreconditionFailedError} from "../api/common/error/RestError"
 import type {PlanPrices} from "../api/entities/sys/PlanPrices"
@@ -257,8 +257,12 @@ export function isSharingActive(lastBooking: ?Booking): boolean {
 	return getCurrentCount(BookingItemFeatureType.Sharing, lastBooking) !== 0
 }
 
-export function isBusinessActive(lastBooking: ?Booking): boolean {
-	return getCurrentCount(BookingItemFeatureType.Business, lastBooking) !== 0
+/**
+ * Checks if the business feature is booked for the customer. Can be used without loading the last booking instance. This is required
+ * for non admin users because they are not allowed to access the bookings.
+ */
+export function isBusinessFeatureActive(customer: Customer): boolean {
+	return !!customer.customizations.find(feature => feature.feature === FeatureType.BusinessFeatureEnabled)
 }
 
 export function getIncludedAliases(customerInfo: CustomerInfo): number {
@@ -286,7 +290,7 @@ export function getSubscriptionType(lastBooking: ?Booking, customer: Customer, c
 		storageGb: getTotalStorageCapacity(customer, customerInfo, lastBooking),
 		orderStorageGb: getTotalStorageCapacity(customer, customerInfo, lastBooking), // dummy value
 		sharing: isSharingActive(lastBooking),
-		business: isBusinessActive(lastBooking),
+		business: isBusinessFeatureActive(customer),
 		whitelabel: isWhitelabelActive(lastBooking),
 	}
 	const foundPlan = descendingSubscriptionOrder.find((plan) => hasAllFeaturesInPlan(currentSubscription, subscriptions[plan]))

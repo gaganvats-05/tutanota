@@ -17,7 +17,7 @@ import type {AccountingInfo} from "../api/entities/sys/AccountingInfo"
 import {AccountingInfoTypeRef} from "../api/entities/sys/AccountingInfo"
 import {worker} from "../api/main/WorkerClient"
 import {UserTypeRef} from "../api/entities/sys/User"
-import {formatPrice, formatPriceDataWithInfo, getCurrentCount, getFormattedSubscriptionPrice} from "./PriceUtils"
+import {formatPrice, formatPriceDataWithInfo, getCurrentCount} from "./PriceUtils"
 import {formatDate, formatNameAndAddress, formatStorageSize} from "../misc/Formatter"
 import {getByAbbreviation} from "../api/common/CountryList"
 import type {Booking} from "../api/entities/sys/Booking"
@@ -41,23 +41,16 @@ import * as SwitchToBusinessInvoiceDataDialog from "./SwitchToBusinessInvoiceDat
 import {NotFoundError} from "../api/common/error/RestError"
 import type {EntityUpdateData} from "../api/main/EventController"
 import {isUpdateForTypeRef} from "../api/main/EventController"
-import type {SubscriptionData, SubscriptionTypeEnum} from "./SubscriptionUtils"
+import type {SubscriptionTypeEnum} from "./SubscriptionUtils"
 import {
-	buyBusiness,
-	getBusinessUsageSubscriptionType,
 	getDisplayNameOfSubscriptionType,
-	getIncludedAliases,
-	getIncludedStorageCapacity,
-	getNbrOfContactForms,
-	getNbrOfUsers,
 	getSubscriptionType,
 	getTotalAliases,
 	getTotalStorageCapacity,
-	isBusinessActive,
+	isBusinessFeatureActive,
 	isSharingActive,
 	isWhitelabelActive,
-	showServiceTerms,
-	UpgradePriceType
+	showServiceTerms
 } from "./SubscriptionUtils"
 import {ButtonN, ButtonType} from "../gui/base/ButtonN"
 import {TextFieldN} from "../gui/base/TextFieldN"
@@ -381,11 +374,16 @@ export class SubscriptionViewer implements UpdatableSettingsViewer {
 					label: "businessFeature_label",
 					value: this._businessFieldValue,
 					disabled: true,
-					injectionsRight: () => !isBusinessActive(this._lastBooking)
-						? m(ButtonN, enableBusinessActionAttrs)
-						// business feature cannot be canceled for business customers
-						: (!this._accountingInfo || !this._accountingInfo.business) ? m(ButtonN, disableBusinessActionAttrs) : null
-					,
+					injectionsRight: () => {
+						if (!this._customer || isBusinessFeatureActive(this._customer) && this._customer.businessUse) {
+							// viewer not initialized yet or customer is business customer as they are not allowed to disable business feature
+							return null
+						} else if (isBusinessFeatureActive(this._customer)) {
+							return m(ButtonN, disableBusinessActionAttrs)
+						} else {
+							return m(ButtonN, enableBusinessActionAttrs)
+						}
+					}
 				}),
 				m(TextFieldN, {
 					label: "contactForms_label",
@@ -440,7 +438,7 @@ export class SubscriptionViewer implements UpdatableSettingsViewer {
 					|| this._customer.orderProcessingAgreementNeeded)))
 	}
 
-	_updateCustomerData(customer: Customer) {
+	_updateCustomerData(customer: Customer): Promise<*> {
 		let p = Promise.resolve()
 		this._customer = customer
 		this._usageTypeFieldValue(customer.businessUse ? lang.get("pricing.businessUse_label") : lang.get("pricing.privateUse_label"))
@@ -451,7 +449,8 @@ export class SubscriptionViewer implements UpdatableSettingsViewer {
 		} else {
 			this._orderAgreement = null
 		}
-		p.then(() => {
+		this._updateBusinessField()
+		return p.then(() => {
 			if (customer.orderProcessingAgreementNeeded) {
 				this._orderAgreementFieldValue(lang.get("signingNeeded_msg"))
 			} else if (this._orderAgreement) {
@@ -464,15 +463,16 @@ export class SubscriptionViewer implements UpdatableSettingsViewer {
 	}
 
 	_switchToBusinessUse(): void {
-		if (this._customer && this._customer.businessUse === false) {
+		const customer = this._customer
+		if (customer && customer.businessUse === false) {
 			let accountingInfo = neverNull(this._accountingInfo)
 			const invoiceCountry = neverNull(getByAbbreviation(neverNull(accountingInfo.invoiceCountry)))
-			SwitchToBusinessInvoiceDataDialog.show(neverNull(this._customer), {
+			SwitchToBusinessInvoiceDataDialog.show(customer, {
 					invoiceAddress: formatNameAndAddress(accountingInfo.invoiceName, accountingInfo.invoiceAddress),
 					country: invoiceCountry,
 					vatNumber: ""
 				}, accountingInfo,
-				isBusinessActive(this._lastBooking),
+				isBusinessFeatureActive(customer),
 				"pricing.businessUse_label",
 				"businessChangeInfo_msg")
 		}
@@ -530,6 +530,7 @@ export class SubscriptionViewer implements UpdatableSettingsViewer {
 				              return locator.entityClient.loadRange(BookingTypeRef, neverNull(customerInfo.bookings).items, GENERATED_MAX_ID, 1, true)
 				                            .then(bookings => {
 					                            this._lastBooking = bookings.length > 0 ? bookings[bookings.length - 1] : null
+					                            this._customer = customer
 					                            this._isCancelled = customer.canceledPremiumAccount
 					                            this._currentSubscription = getSubscriptionType(this._lastBooking, customer, customerInfo)
 					                            this._updateSubscriptionField(this._isCancelled)
@@ -625,7 +626,9 @@ export class SubscriptionViewer implements UpdatableSettingsViewer {
 	}
 
 	_updateBusinessField(): Promise<void> {
-		if (isBusinessActive(this._lastBooking)) {
+		if (!this._customer) {
+			this._businessFieldValue("")
+		} else if (isBusinessFeatureActive(this._customer)) {
 			this._businessFieldValue(lang.get("active_label"))
 		} else {
 			this._businessFieldValue(lang.get("deactivated_label"))
@@ -654,7 +657,9 @@ export class SubscriptionViewer implements UpdatableSettingsViewer {
 				return this._updatePriceInfo()
 			})
 		} else if (isUpdateForTypeRef(CustomerTypeRef, update)) {
-			return locator.entityClient.load(CustomerTypeRef, instanceId).then(customer => this._updateCustomerData(customer))
+			return locator.entityClient.load(CustomerTypeRef, instanceId).then(customer => {
+				this._updateCustomerData(customer)
+			})
 		} else if (isUpdateForTypeRef(GiftCardTypeRef, update)) {
 			return locator.entityClient.load(GiftCardTypeRef, [instanceListId, instanceId]).then(giftCard => {
 				this._giftCards.set(elementIdPart(giftCard._id), giftCard)

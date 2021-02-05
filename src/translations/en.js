@@ -1291,6 +1291,12 @@ export default {
 		"upgradePlan_msg": "Your subscription will be upgraded to {plan}.",
 		"businessIncluded_msg": "The business feature will be included.",
 // TODO changed
-		"pricing.comparisonDomainPremium_msg": "1 custom domain"
+		"pricing.comparisonDomainPremium_msg": "1 custom domain",
+		"businessFeatureRequiredInvite_msg": "To invite people you have to order the business feature.",
+		"businessFeatureRequiredMultipleDomains_msg": "To add multiple custom email domains you have to order the business feature.",
+		"businessFeatureRequiredGeneral_msg": "To use this function you have to order the business feature.",
+		"ordertItNow_msg": "Would you like to order it now?",
+		"contactAdmin_msg": "Please contact your administrator."
+
 	}
 }
